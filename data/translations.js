@@ -44,6 +44,7 @@ window.App.translations = {
         etf_voo_desc: "Tracks the S&P 500 index, representing 500 large U.S. companies.",
         etf_iwda_desc: "Exposure to companies from 23 developed countries.",
         etf_qqq_desc: "Includes 100 of the largest non-financial companies on Nasdaq.",
+        githubPage: "GitHub page",
         etf_vwce_desc: "Covers large and mid-cap stocks from developed and emerging markets."
     },
     cs: {
@@ -84,6 +85,7 @@ window.App.translations = {
         etf_voo_desc: "Sleduje index S&P 500, který představuje 500 největších společností v USA.",
         etf_iwda_desc: "Expozice vůči společnostem z 23 vyspělých zemí.",
         etf_qqq_desc: "Zahrnuje 100 největších nefinančních společností na burze Nasdaq.",
+        githubPage: "Stránka na GitHubu",
         etf_vwce_desc: "Zahrnuje akcie společností s velkou a střední tržní kapitalizací z rozvinutých i rozvíjejících se trhů."
     },
     de: {
@@ -124,6 +126,7 @@ window.App.translations = {
         etf_voo_desc: "Verfolgt den S&P 500 Index, der 500 große US-Unternehmen repräsentiert.",
         etf_iwda_desc: "Engagement in Unternehmen aus 23 Industrieländern.",
         etf_qqq_desc: "Enthält 100 der größten nicht-finanziellen Unternehmen an der Nasdaq.",
+        githubPage: "GitHub-Seite",
         etf_vwce_desc: "Deckt Large- und Mid-Cap-Aktien aus Industrie- und Schwellenländern ab."
     },
     fr: {
@@ -164,6 +167,7 @@ window.App.translations = {
         etf_voo_desc: "Suit l'indice S&P 500, représentant 500 grandes entreprises américaines.",
         etf_iwda_desc: "Exposition aux entreprises de 23 pays développés.",
         etf_qqq_desc: "Comprend 100 des plus grandes entreprises non financières du Nasdaq.",
+        githubPage: "Page GitHub",
         etf_vwce_desc: "Couvre les actions de grandes et moyennes capitalisations des marchés développés et émergents."
     },
     es: {
@@ -204,6 +208,7 @@ window.App.translations = {
         etf_voo_desc: "Sigue el índice S&P 500, que representa a 500 grandes empresas estadounidenses.",
         etf_iwda_desc: "Exposición a empresas de 23 países desarrollados.",
         etf_qqq_desc: "Incluye 100 de las mayores empresas no financieras del Nasdaq.",
+        githubPage: "Página de GitHub",
         etf_vwce_desc: "Cubre acciones de gran y mediana capitalización de mercados desarrollados y emergentes."
     },
     it: {
@@ -242,6 +247,7 @@ window.App.translations = {
         etf_voo_desc: "Segue l'indice S&P 500, che rappresenta 500 grandi aziende statunitensi.",
         etf_iwda_desc: "Esposizione ad aziende di 23 paesi sviluppati.",
         etf_qqq_desc: "Include 100 delle più grandi società non finanziarie del Nasdaq.",
+        githubPage: "Pagina GitHub",
         etf_vwce_desc: "Copre titoli a grande e media capitalizzazione dei mercati sviluppati ed emergenti."
     },
     pl: {
@@ -280,6 +286,7 @@ window.App.translations = {
         etf_voo_desc: "Śledzi indeks S&P 500, reprezentujący 500 dużych firm z USA.",
         etf_iwda_desc: "Ekspozycja na firmy z 23 krajów rozwiniętych.",
         etf_qqq_desc: "Obejmuje 100 największych firm niefinansowych na Nasdaq.",
+        githubPage: "Strona na GitHub",
         etf_vwce_desc: "Obejmuje akcje o dużej i średniej kapitalizacji z rynków rozwiniętych i wschodzących."
     },
     sv: {
@@ -316,6 +323,7 @@ window.App.translations = {
         etf_voo_desc: "Följer S&P 500-indexet, som representerar 500 stora amerikanske företag.",
         etf_iwda_desc: "Exponering mot företag från 23 utvecklade länder.",
         etf_qqq_desc: "Inkluderar 100 av de största icke-finansiella företagen på Nasdaq.",
+        githubPage: "GitHub-sida",
         etf_vwce_desc: "Omfattar aktier i stora och medelstora företag från utvecklade marknader och tillväxtmarknader."
     },
     no: {
@@ -352,6 +360,7 @@ window.App.translations = {
         etf_voo_desc: "Følger S&P 500-indeksen, som representerer 500 store amerikanske selskaper.",
         etf_iwda_desc: "Eksponering mot selskaper fra 23 utviklede land.",
         etf_qqq_desc: "Inkluderer 100 av de største ikke-finansielle selskapene på Nasdaq.",
+        githubPage: "GitHub-side",
         etf_vwce_desc: "Dekker aksjer i store og mellomstore selskaper fra utviklede markeder og fremvoksende markeder."
     },
     da: {
@@ -388,6 +397,7 @@ window.App.translations = {
         etf_voo_desc: "Følger S&P 500-indekset, der repræsenterer 500 store amerikanske virksomheder.",
         etf_iwda_desc: "Eksponering mod virksomheder fra 23 udviklede lande.",
         etf_qqq_desc: "Omfatter 100 af de største ikke-finansielle virksomheder på Nasdaq.",
+        githubPage: "GitHub-side",
         etf_vwce_desc: "Dækker aktier i store og mellemstore virksomheder fra udviklede markeder og vækstmarkeder."
     },
     hu: {
@@ -425,6 +435,7 @@ window.App.translations = {
         etf_voo_desc: "Az S&P 500 indexet követi, amely 500 nagy amerikai vállalatot képvisel.",
         etf_iwda_desc: "23 fejlett ország vállalatainak kitettsége.",
         etf_qqq_desc: "A Nasdaq 100 legnagyobb nem pénzügyi vállalatát tartalmazza.",
+        githubPage: "GitHub oldal",
         etf_vwce_desc: "Fejlett és feltörekvő piacok nagy és közepes tőkeértékű részvényeit fedi le."
     },
     ro: {
@@ -462,6 +473,7 @@ window.App.translations = {
         etf_voo_desc: "Urmează indicele S&P 500, reprezentând 500 de companii mari din SUA.",
         etf_iwda_desc: "Expunere la companii din 23 de țări dezvoltate.",
         etf_qqq_desc: "Include 100 dintre cele mai mari companii non-financiare de pe Nasdaq.",
+        githubPage: "Pagină GitHub",
         etf_vwce_desc: "Acoperă acțiuni cu capitalizare mare și medie de pe piețele dezvoltate și emergente."
     },
     bg: {
@@ -498,6 +510,7 @@ window.App.translations = {
         etf_voo_desc: "Следи индекса S&P 500, представящ 500 големи американски компании.",
         etf_iwda_desc: "Експозиция към компании от 23 развити страни.",
         etf_qqq_desc: "Включва 100 от най-големите нефинансови компании на Nasdaq.",
+        githubPage: "GitHub страница",
         etf_vwce_desc: "Обхваща акции с голяма и средна капитализация от развити и развиващи се пазари."
     },
     // Adding generic fallbacks for missing ones using English base to ensure app functions
@@ -515,6 +528,7 @@ Object.assign(window.App.translations.isk, {
     etf_voo_desc: "Fylgir S&P 500 vísitölunni, sem stendur fyrir 500 stór bandarísk fyrirtæki.",
     etf_iwda_desc: "Fjárfesting í fyrirtækjum frá 23 þróuðum löndum.",
     etf_qqq_desc: "Inniheldur 100 af stærstu fyrirtækjunum utan fjármálageirans á Nasdaq.",
+    githubPage: "GitHub síða",
     etf_vwce_desc: "Nær yfir stór og meðalstór hlutabréf frá þróuðum mörkuðum og nýmörkuðum."
 });
 window.App.translations.fallBackDefaults('sr');
@@ -526,6 +540,7 @@ Object.assign(window.App.translations.sr, {
     etf_voo_desc: "Prati indeks S&P 500, koji predstavlja 500 velikih američkih kompanija.",
     etf_iwda_desc: "Izloženost kompanijama iz 23 razvijene zemlje.",
     etf_qqq_desc: "Uključuje 100 najvećih nefinansijskih kompanija na Nasdaqu.",
+    githubPage: "GitHub stranica",
     etf_vwce_desc: "Pokriva akcije kompanija sa velikom i srednjom kapitalizacijom sa razvijenih tržišta i tržišta u razvoju."
 });
 window.App.translations.fallBackDefaults('mk');
@@ -537,6 +552,7 @@ Object.assign(window.App.translations.mk, {
     etf_voo_desc: "Го следи индексот S&P 500, кој претставува 500 големи американски компании.",
     etf_iwda_desc: "Изложеност на компании од 23 развиени земји.",
     etf_qqq_desc: "Вклучува 100 од најголемите нефинансиски компании на Nasdaq.",
+    githubPage: "GitHub страница",
     etf_vwce_desc: "Опфаќа акции со голема и средна капитализација од развиени пазари и пазари во развој."
 });
 window.App.translations.fallBackDefaults('hr');
@@ -548,6 +564,7 @@ Object.assign(window.App.translations.hr, {
     etf_voo_desc: "Prati indeks S&P 500, koji predstavlja 500 velikih američkih kompanija.",
     etf_iwda_desc: "Izloženost kompanijama iz 23 razvijene zemlje.",
     etf_qqq_desc: "Uključuje 100 najvećih nefinansijskih kompanija na Nasdaqu.",
+    githubPage: "GitHub stranica",
     etf_vwce_desc: "Obuhvaća dionice s velikom i srednjom kapitalizacijom s razvijenih tržišta i tržišta u razvoju."
 });
 window.App.translations.fallBackDefaults('sq');
@@ -559,6 +576,7 @@ Object.assign(window.App.translations.sq, {
     etf_voo_desc: "Ndjek indeksin S&P 500, i cili përfaqëson 500 kompani të mëdha amerikane.",
     etf_iwda_desc: "Ekspozimi ndaj kompanive nga 23 vende të zhvilluara.",
     etf_qqq_desc: "Përfshin 100 nga kompanitë më të mëdha jo-financiare në Nasdaq.",
+    githubPage: "Faqja në GitHub",
     etf_vwce_desc: "Mbulon aksionet me kapitalizim të madh dhe të mesëm nga tregjet e zhvilluara dhe ato në zhvillim."
 });
 window.App.translations.fallBackDefaults('ka');
@@ -570,6 +588,7 @@ Object.assign(window.App.translations.ka, {
     etf_voo_desc: "აკვირდება S&P 500 ინდექსს, რომელიც წარმოადგენს 500 მსხვილ ამერიკულ კომპანიას.",
     etf_iwda_desc: "ინვესტიცია 23 განვითარებული ქვეყნის კომპანიებში.",
     etf_qqq_desc: "მოიცავს Nasdaq-ის 100 უმსხვილეს არაფინანსურ კომპანიას.",
+    githubPage: "GitHub გვერდი",
     etf_vwce_desc: "მოიცავს მსხვილი და საშუალო კაპიტალიზაციის აქციებს განვითარებული და განვითარებადი ბაზრებიდან."
 });
 window.App.translations.fallBackDefaults('uk');
@@ -581,6 +600,7 @@ Object.assign(window.App.translations.uk, {
     etf_voo_desc: "Відстежує індекс S&P 500, що представляє 500 великих компаній США.",
     etf_iwda_desc: "Інвестиції в компанії з 23 розвинених країн.",
     etf_qqq_desc: "Включає 100 найбільших нефінансових компаній на Nasdaq.",
+    githubPage: "Сторінка на GitHub",
     etf_vwce_desc: "Охоплює акції великої та середньої капіталізації з розвинених ринків та ринків, що розвиваються."
 });
 window.App.translations.fallBackDefaults('be');
@@ -592,6 +612,7 @@ Object.assign(window.App.translations.be, {
     etf_voo_desc: "Адсочвае індэкс S&P 500, які прадстаўляе 500 буйных кампаній ЗША.",
     etf_iwda_desc: "Інвестыцыі ў кампаніі з 23 развітых краін.",
     etf_qqq_desc: "Уключае 100 найбуйнейшых нефінансавых кампаній на Nasdaq.",
+    githubPage: "Старонка на GitHub",
     etf_vwce_desc: "Ахоплівае акцыі буйной і сярэдняй капіталізацыі з развітых рынкаў і рынкаў, якія развіваюцца."
 });
 window.App.translations.fallBackDefaults('ru');
@@ -634,6 +655,7 @@ Object.assign(window.App.translations.ru || (window.App.translations.ru = {}), w
     etf_voo_desc: "Отслеживает индекс S&P 500, представляющий 500 крупнейших компаний США.",
     etf_iwda_desc: "Инвестиции в компании из 23 развитых стран.",
     etf_qqq_desc: "Включает 100 крупнейших нефинансовых компаний на Nasdaq.",
+    githubPage: "Страница на GitHub",
     etf_vwce_desc: "Охватывает акции компаний с большой и средней капитализацией на развитых и развивающихся рынках."
 });
 Object.assign(window.App.translations.ja || (window.App.translations.ja = {}), window.App.translations.en, {
@@ -672,6 +694,7 @@ Object.assign(window.App.translations.ja || (window.App.translations.ja = {}), w
     etf_voo_desc: "米国の大手企業500社を代表するS&P 500指数に連動します。",
     etf_iwda_desc: "先進国23カ国の企業への分散投資を可能にします。",
     etf_qqq_desc: "Nasdaq上場の非金融大手100社で構成されています。",
+    githubPage: "GitHubページ",
     etf_vwce_desc: "先進国および新興国市場の大型・中型株を網羅しています。"
 });
 Object.assign(window.App.translations.tr || (window.App.translations.tr = {}), window.App.translations.en, {
@@ -710,5 +733,6 @@ Object.assign(window.App.translations.tr || (window.App.translations.tr = {}), w
     etf_voo_desc: "500 büyük ABD şirketini temsil eden S&P 500 endeksini takip eder.",
     etf_iwda_desc: "23 gelişmiş ülkedeki şirketlere yatırım imkanı sunar.",
     etf_qqq_desc: "Nasdaq'taki en büyük finans dışı 100 şirketi içerir.",
+    githubPage: "GitHub sayfası",
     etf_vwce_desc: "Gelişmiş ve gelişmekte olan piyasalardaki büyük og orta ölçekli hisse senetlerini kapsar."
 });
