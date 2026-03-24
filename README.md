@@ -10,6 +10,7 @@ A modern, minimalist investment calculator designed to project long-term portfol
 [**Live Demo**](https://investmentcalculator.pomerancee.workers.dev) | [**License**](#license)
 
 ## Preview
+Desktop preview
 ![Calculator Screenshot](screenshot.png)
 
 ---
@@ -27,6 +28,7 @@ I wanted to create a tool that is **fast**, **modern**, **beginner-friendly**, k
 *   **FIRE (Financial Independence, Retire Early) Calculator:** Estimate how much capital is needed to retire early based on user expenses and a safe withdrawal percentage.
 *   **Year-by-year breakdown:** Show Total Invested, Interest Earned, and Total Balance each year.
 *   **Privacy First:** All calculations are done locally in the user's browser. No data is sent to any server.
+*   **Phone UI** Added mobile UI with bottom navigation and optimized layout for better usability on smaller devices.
 
 ### Additional Features
 *  **Benchmark Tracker:** Compare the last used parameters with new ones.
