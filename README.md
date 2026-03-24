@@ -2,8 +2,10 @@
 
 ![License](https://img.shields.io/badge/license-CC--BY--NC--SA-blue)
 ![Made with](https://img.shields.io/badge/Made%20with-JavaScript-yellow)
+![Platform](https://img.shields.io/badge/hosted%20on-Cloudflare-orange)
 [![Live Demo](https://img.shields.io/badge/demo-online-green)](https://investmentcalculator.pomerancee.workers.dev)
 ![Open Source](https://img.shields.io/badge/Open%20Source-Yes-brightgreen)
+![Responsive](https://img.shields.io/badge/mobile-friendly-blue)
 
 A modern, minimalist investment calculator designed to project long-term portfolio growth without ads or tracking.
 
