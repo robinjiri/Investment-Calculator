@@ -11,10 +11,13 @@ A modern, minimalist investment calculator designed to project long-term portfol
 
 ## Preview
 Desktop preview
+
 ![Calculator Screenshot](screenshot.png)
 
 Phone preview
+
 ![Calculator Phone Screenshot](screenshot-mobile.png)
+
 ---
 
 ### Why I built this
