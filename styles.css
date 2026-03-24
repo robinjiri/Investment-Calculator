@@ -1916,25 +1916,53 @@ input[type="range"]::-webkit-slider-thumb:hover {
     align-items: center;
 }
 
+.calculator-grid {
+    display: grid;
+    grid-template-columns: 360px minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+    min-width: 0;
+}
+
+.results-panel {
+    min-width: 0;
+}
+
 .standard-cards-wrapper {
     display: grid;
-    grid-template-columns: 320px 320px 420px;
-    gap: 24px;
-    align-items: end;
-    /* Align Invested/Portfolio to bottom of Profit */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    align-items: stretch;
     width: 100%;
 }
 
+.summary-cards .card {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.summary-cards .card h3 {
+    font-size: 0.9rem;
+    white-space: normal;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
 .summary-cards .card.invested {
-    height: 140px;
+    height: auto;
+    min-height: 120px;
 }
 
 .summary-cards .card.portfolio {
-    height: 140px;
+    height: auto;
+    min-height: 120px;
 }
 
 .summary-cards .card.profit {
-    height: 160px;
+    height: auto;
+    min-height: 120px;
 }
 
 /* --- STATUS 2: FIRE IS ON --- */
@@ -2702,5 +2730,602 @@ body.light-mode .disclaimer-text {
     100% {
         transform: translate(-50%, -50%) scale(25);
         opacity: 0;
+    }
+}
+
+/* Hide tabbar on desktop */
+#tabbar {
+    display: none;
+}
+
+/*==========================================================================
+  RESPONSIVE DESIGN (MOBILE & TABLET)
+  ==========================================================================*/
+
+@media (max-width: 900px) {
+    :root {
+        /* ==========================================================
+           Mobile Layout Variables (Adaptive & Editable values)
+           Uses clamp() to scale perfectly between small/large screens
+           ========================================================== */
+
+        /* Core Spacing */
+        --mobile-app-padding: clamp(0.25rem, 2vw, 0.75rem);
+        --mobile-body-padding: clamp(0.5rem, 3vw, 1.25rem);
+        --mobile-bottom-spacing: clamp(100px, 15vh, 140px);
+        /* Space for the floating tabbar */
+
+        /* Header Configuration (Visible only on Tab 1) */
+        --mobile-header-margin-bottom: clamp(0.5rem, 2vh, 1.5rem);
+        --mobile-header-padding-right: clamp(80px, 25vw, 120px);
+        /* Space for top controls */
+        --mobile-header-title-size: clamp(1rem, 5vw, 1.5rem);
+        --mobile-header-desc-size: clamp(0.2rem, 2vw, 0.95rem);
+
+        /* Top Right Controls (Theme & Language) */
+        --mobile-toggles-scale: 0.65;
+        --mobile-toggles-top: 0;
+        --mobile-toggles-right: 0;
+        --mobile-toggles-gap: clamp(0.25rem, 1.5vw, 1rem);
+
+        /* Summary 3-Boxes Layout */
+        --mobile-cards-gap: clamp(0.15rem, 1vw, 0.5rem);
+        --mobile-card-width: 33.333%;
+        --mobile-card-padding: clamp(0.25rem, 1.5vh, 0.75rem) clamp(0.1rem, 0.5vw, 0.5rem);
+        --mobile-card-title-size: clamp(0.5rem, 2.8vw, 0.75rem);
+        --mobile-card-value-size: clamp(0.7rem, 4.5vw, 1.1rem);
+        --mobile-card-percent-size: clamp(0.6rem, 3.2vw, 0.8rem);
+
+        /* Chart */
+        --mobile-chart-height: clamp(260px, 45vh, 420px);
+        --mobile-chart-padding: clamp(0.25rem, 2vw, 1rem);
+        --mobile-graph-title-size: clamp(0.7rem, 3.5vw, 0.95rem);
+        --mobile-chart-btn-font: clamp(0.65rem, 3vw, 0.8rem);
+        --mobile-chart-btn-padding: clamp(0.3rem, 1.5vw, 0.6rem) clamp(0.4rem, 2vw, 0.85rem);
+
+        /* Tab Bar Navigation */
+        --mobile-tab-active-color: #3b82f6;
+
+        /* Buttons / Touch Interactions */
+        --mobile-touch-target: clamp(40px, 12vw, 56px);
+
+        /* Inputs & Controls (Tab 2) */
+        --mobile-input-padding: clamp(0.5rem, 2vw, 1rem);
+        --mobile-input-font: clamp(0.85rem, 4.5vw, 1.2rem);
+        --mobile-label-font: clamp(0.75rem, 3.5vw, 1rem);
+
+        /* Tables (Tab 3) */
+        --mobile-table-font: clamp(0.65rem, 3vw, 0.85rem);
+        --mobile-table-padding: clamp(0.5rem, 2vw, 1rem);
+
+        /* Milestones (Tab 4) */
+        --mobile-milestone-pad: clamp(0.75rem, 3.5vw, 1.5rem);
+        --mobile-milestone-font: clamp(0.85rem, 4vw, 1.1rem);
+        --mobile-milestone-desc: clamp(0.7rem, 3.5vw, 0.95rem);
+        --mobile-milestone-icon: clamp(32px, 10vw, 48px);
+
+        /* Footer & Disclaimers */
+        --mobile-footer-font: clamp(0.55rem, 2.5vw, 0.75rem);
+    }
+
+    /* Base Container Adjustments */
+    html,
+    body {
+        overflow-x: hidden;
+        max-width: 100vw;
+        width: 100%;
+    }
+
+    .app-container {
+        padding: var(--mobile-app-padding);
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100vw;
+    }
+
+    body {
+        padding: var(--mobile-body-padding);
+        padding-bottom: var(--mobile-bottom-spacing);
+    }
+
+    /* On tab 1: strip all top padding so the title starts at the very top */
+    body[data-active-tab="1"] {
+        padding-top: 0;
+    }
+
+    body[data-active-tab="1"] .app-container {
+        padding-top: 0;
+    }
+
+    /* Global Mobile Layout */
+    body:not([data-active-tab="0"]) #app-header-section {
+        display: none !important;
+    }
+
+    #app-header-section {
+        margin-bottom: var(--mobile-header-margin-bottom);
+        padding-right: var(--mobile-header-padding-right);
+    }
+
+    #app-header-section h1 {
+        font-size: var(--mobile-header-title-size);
+        text-align: left;
+        margin-top: 0;
+        line-height: 1.2;
+    }
+
+    #app-header-section .app-description {
+        font-size: var(--mobile-header-desc-size);
+        text-align: left;
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    /* Shrink the top controls (theme / language) and put them in flow */
+    .top-controls {
+        position: relative;
+        /* Prevent overlap on tabs where header is hidden */
+        top: auto;
+        right: auto;
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--mobile-toggles-gap);
+        z-index: 1000;
+        transform: scale(var(--mobile-toggles-scale));
+        transform-origin: top right;
+        margin-bottom: 0.5rem;
+    }
+
+    /* On Tab 1 (graph view), float the controls absolutely so the title
+       starts at the very top-left without being pushed down */
+    body[data-active-tab="1"] .top-controls {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        margin-bottom: 0;
+        height: 0;
+        overflow: visible;
+    }
+
+    /* Make GitHub button compact on mobile */
+    .github-btn {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .gh-label {
+        display: none;
+        /* Only show icon and stars on tight mobile */
+    }
+
+    /* Stack grid properly */
+    .calculator-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /* Mobile: header is the positioning context, controls pinned top-right */
+    #app-header-section {
+        position: relative;
+        text-align: left;
+        padding-right: 0;
+    }
+
+    #app-header-section .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    #app-header-section .header-content .top-controls {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-left: 0;
+        flex-shrink: 0;
+    }
+
+    /* Tab View Logic */
+    body [data-tab-content]:not(.tab-active) {
+        display: none !important;
+    }
+
+    /* The results panel grid is broken on mobile, make it flex */
+    .results-panel {
+        display: flex !important;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    /* Controls Panel */
+    .controls-content {
+        max-height: none;
+        opacity: 1;
+        overflow: visible;
+        margin-top: 0;
+    }
+
+    /* Summary Cards */
+    .summary-cards,
+    .summary-cards.with-fire {
+        display: flex !important;
+        /* Force flex, override grid */
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .standard-cards-wrapper {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap;
+        gap: var(--mobile-cards-gap) !important;
+        width: 100%;
+        overflow: hidden !important;
+    }
+
+    /* Ensure only 3 main boxes are kept side-by-side */
+    .summary-cards.with-fire .standard-cards-wrapper {
+        display: flex !important;
+        flex-direction: row !important;
+    }
+
+    /* Auto height for cards, strict min-width for horizontal fit */
+    .card.invested,
+    .card.portfolio,
+    .card.profit,
+    .card.fire,
+    .summary-cards.with-fire .card.invested,
+    .summary-cards.with-fire .card.portfolio,
+    .summary-cards.with-fire .card.profit,
+    .summary-cards.with-fire .card.fire {
+        height: auto !important;
+        min-height: auto;
+        padding: var(--mobile-card-padding) !important;
+        width: var(--mobile-card-width) !important;
+        min-width: 0 !important;
+        flex: 1 1 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        word-break: break-word;
+        hyphens: auto;
+        overflow: hidden;
+    }
+
+    .card h3 {
+        font-size: var(--mobile-card-title-size) !important;
+        margin-bottom: 0.25rem;
+        white-space: normal;
+        line-height: 1.1;
+    }
+
+    .card p.value {
+        font-size: var(--mobile-card-value-size) !important;
+    }
+
+    .profit-percent {
+        font-size: var(--mobile-card-percent-size) !important;
+    }
+
+    /* Touch Friendly Targets */
+    .secondary-btn,
+    .chart-type-btn,
+    input[type="number"],
+    select,
+    .selected-option,
+    .selected-currency,
+    .custom-option {
+        min-height: var(--mobile-touch-target);
+    }
+
+    /* Chart Adjustments */
+    .chart-container {
+        height: var(--mobile-chart-height);
+        padding: var(--mobile-chart-padding);
+        width: 100%;
+        min-width: 0;
+        max-width: 100vw;
+        overflow: hidden;
+        display: block !important;
+    }
+
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 0;
+        display: flex !important;
+    }
+
+    .chart-controls {
+        width: 100%;
+        display: flex;
+        gap: 0.4rem;
+    }
+
+    .chart-type-btn {
+        flex: 1;
+        text-align: center;
+        font-size: clamp(0.6rem, 2.5vw, 0.75rem);
+        padding: 0.28rem 0.2rem;
+        min-height: unset !important;
+        height: auto;
+        line-height: 1.2;
+    }
+
+    /* Graph section title */
+    .chart-header h3,
+    .chart-header h2,
+    .graph-title {
+        font-size: var(--mobile-graph-title-size) !important;
+    }
+
+    /* Breakdown table & Details Section */
+    .details-section {
+        display: block !important;
+    }
+
+    .status-side {
+        display: block !important;
+    }
+
+    #breakdown-table-container {
+        width: 100%;
+        display: block !important;
+        max-height: none !important;
+        opacity: 1 !important;
+    }
+
+    #toggle-table-btn {
+        display: none !important;
+        /* Hide the button since it's already expanded on tab 3 */
+    }
+
+    /* Milestones expansion */
+    .milestones-container {
+        display: block !important;
+        opacity: 1 !important;
+    }
+
+    #show-more-milestones-btn {
+        display: none !important;
+    }
+
+    .table-header-grid {
+        display: none;
+        /* Hide grid header component */
+    }
+
+    .table-scroll-area {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        border-radius: var(--radius-md);
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .breakdown-table {
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed;
+        box-sizing: border-box;
+    }
+
+    .breakdown-table th,
+    .breakdown-table td {
+        font-size: var(--mobile-table-font);
+        padding: clamp(0.25rem, 1.5vw, 0.6rem) clamp(0.2rem, 1.2vw, 0.5rem);
+        word-break: break-all;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    #breakdown-table-container {
+        width: 100%;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+    /* Milestones full width */
+    #milestones-list li,
+    #extra-milestones-list li {
+        width: 100%;
+        margin-bottom: clamp(0.5rem, 2vh, 1rem);
+    }
+
+    /* === NEW ADAPTIVE MOBILE SCALING FOR TABS 2, 3, 4 === */
+
+    /* Tab 2: Inputs & Labels */
+    .input-group label span:first-child {
+        font-size: var(--mobile-label-font);
+    }
+
+    input[type="number"],
+    .custom-select-wrapper select,
+    .selected-option,
+    .selected-currency,
+    .custom-option {
+        font-size: var(--mobile-input-font);
+        padding: var(--mobile-input-padding);
+    }
+
+    /* Tab 3: Breakdown Table */
+    .breakdown-table th,
+    .breakdown-table td {
+        font-size: var(--mobile-table-font);
+        padding: var(--mobile-table-padding);
+    }
+
+    /* Tab 4: Milestones */
+    .milestone-item {
+        padding: var(--mobile-milestone-pad);
+    }
+
+    .milestone-icon {
+        width: var(--mobile-milestone-icon);
+        height: var(--mobile-milestone-icon);
+    }
+
+    .milestone-text h4 {
+        font-size: var(--mobile-milestone-font);
+    }
+
+    .milestone-text p {
+        font-size: var(--mobile-milestone-desc);
+    }
+
+    /* Footer & Disclaimer */
+    .disclaimer-section p text,
+    .disclaimer-section p,
+    footer p {
+        font-size: var(--mobile-footer-font);
+    }
+
+    /* Extra padding around checkbox */
+    .checkbox-group {
+        padding: 0.5rem 0;
+    }
+
+    /* Tab Bar Styles translated from SCSS */
+    #tabbar {
+        display: block;
+        --c-color: var(--mobile-tab-active-color);
+        /* Active blue color */
+        --c-background: var(--bg-card);
+        --indicator-x: 34px;
+        --indicator-circle-o: 1;
+        --indicator-circle-y: 0px;
+        -webkit-tap-highlight-color: transparent;
+        border-radius: 0;
+        overflow: hidden;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        transform: none;
+        background: var(--c-background);
+        z-index: 5000;
+        box-shadow: var(--shadow-xl), 0 -10px 30px rgba(0, 0, 0, 0.4);
+        width: 100%;
+        max-width: 100%;
+    }
+
+    body.light-mode #tabbar {
+        box-shadow: var(--shadow-xl), 0 -5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    #tabbar .indicator {
+        position: absolute;
+        z-index: 1;
+        left: 0;
+        bottom: 0;
+        display: block;
+        width: 68px;
+        height: 72px;
+        fill: var(--c-color);
+        transform: translateX(var(--indicator-x));
+        transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+
+    #tabbar .indicator path {
+        transform: translateY(2px);
+    }
+
+    #tabbar .indicator circle {
+        opacity: var(--indicator-circle-o);
+        transform: translateY(var(--indicator-circle-y)) translateZ(0);
+        transition: transform 0.4s, opacity 0.4s;
+    }
+
+    #tabbar ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        width: 100%;
+        height: 72px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    #tabbar ul li {
+        --icon-y: 0px;
+        --icon-s: 1;
+        --icon-circle: 0px;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    #tabbar ul li.active {
+        --icon-circle: 28px;
+        --icon-y: -22px;
+    }
+
+    #tabbar ul li button {
+        display: block;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        outline: none;
+        background: none;
+        border: none;
+        position: relative;
+        -webkit-appearance: none;
+        appearance: none;
+        transform: translateY(var(--icon-y)) scale(var(--icon-s)) translateZ(0);
+        transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+
+    #tabbar ul li button:before {
+        content: '';
+        position: absolute;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 50%;
+        background: var(--c-background);
+        clip-path: circle(0px at 50% 100%);
+        transition: clip-path 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+
+    #tabbar ul li.active button:before {
+        clip-path: circle(28px at 50% 100%);
+    }
+
+    #tabbar ul li button svg.tab-icon {
+        color: var(--text-secondary);
+        display: block;
+        overflow: visible;
+        width: 28px;
+        height: 28px;
+        transition: color 0.4s;
+    }
+
+    #tabbar ul li.active button svg.tab-icon {
+        color: var(--c-color);
+    }
+
+    #tabbar ul li button svg.tab-icon:last-child {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        left: 0;
+        clip-path: circle(0px at 50% 100%);
+        transition: clip-path 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+    }
+
+    #tabbar ul li.active button svg.tab-icon:last-child {
+        clip-path: circle(28px at 50% 100%);
     }
 }

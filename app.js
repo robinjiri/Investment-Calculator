@@ -80,6 +80,9 @@ const toggleTableBtn = document.getElementById('toggle-table-btn');
 const tableContainer = document.getElementById('breakdown-table-container');
 const tableBody = document.getElementById('breakdown-table-body');
 
+const mobileControlsToggle = document.getElementById('mobile-controls-toggle');
+const controlsContent = document.getElementById('controls-content');
+
 const githubStarCountNode = document.querySelector('.gh-star-count');
 
 // State
@@ -473,6 +476,86 @@ function attachEventListeners() {
 
     // Milestones Toggle
     showMoreMilestonesBtn.addEventListener('click', toggleExtraMilestones);
+
+    // Tab Bar Navigation Logic
+    const tabbar = document.getElementById('tabbar');
+    if (tabbar) {
+        document.body.setAttribute('data-active-tab', '0');
+        const tabs = tabbar.querySelectorAll('ul li');
+        const tabContents = document.querySelectorAll('[data-tab-content]');
+
+        tabs.forEach((tab) => {
+            tab.addEventListener('click', () => {
+                // Return if already active
+                if (tab.classList.contains('active')) return;
+
+                // Remove active from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // Calculate indicator position
+                const tabRect = tab.getBoundingClientRect();
+                const ul = tabbar.querySelector('ul');
+                const tabbarRect = ul.getBoundingClientRect();
+                
+                // Center of the list item relative to the ul
+                const offset = (tabRect.left - tabbarRect.left) + (tabRect.width / 2);
+                
+                // The indicator SVG width is 68px (center is 34)
+                tabbar.style.setProperty('--indicator-x', `${offset - 34}px`);
+                
+                // Handle content switching
+                const targetIndex = tab.getAttribute('data-tab-index');
+                document.body.setAttribute('data-active-tab', targetIndex);
+                tabContents.forEach(content => {
+                    if (content.getAttribute('data-tab-content') === targetIndex) {
+                        content.classList.add('tab-active');
+                    } else {
+                        content.classList.remove('tab-active');
+                    }
+                });
+                
+                // Extra logic to trigger chart resize if we switch to chart tab
+                if (targetIndex === "1") {
+                    setTimeout(() => {
+                        window.dispatchEvent(new Event('resize'));
+                    }, 50); // slight delay for css display to apply
+                }
+            });
+        });
+
+        // Initialize indicator position on load
+        setTimeout(() => {
+            const activeTab = tabbar.querySelector('ul li.active');
+            if (activeTab) {
+                const tabRect = activeTab.getBoundingClientRect();
+                const ul = tabbar.querySelector('ul');
+                if (ul) {
+                    const tabbarRect = ul.getBoundingClientRect();
+                    const offset = (tabRect.left - tabbarRect.left) + (tabRect.width / 2);
+                    tabbar.style.setProperty('--indicator-x', `${offset - 34}px`);
+                }
+            }
+        }, 100);
+
+        // Update indicator position on window resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const currentActive = tabbar.querySelector('ul li.active');
+                const ul = tabbar.querySelector('ul');
+                if (currentActive && ul) {
+                    const tabRect = currentActive.getBoundingClientRect();
+                    const tabbarRect = ul.getBoundingClientRect();
+                    if (tabRect.width > 0) { // Check if visible
+                        const offset = (tabRect.left - tabbarRect.left) + (tabRect.width / 2);
+                        tabbar.style.setProperty('--indicator-x', `${offset - 34}px`);
+                    }
+                }
+            }, 100);
+        });
+    }
 }
 
 /**
