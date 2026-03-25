@@ -22,9 +22,66 @@ window.App = window.App || {};
 
 let chartInstance = null;
 
-// Helper to determine max ticks based on screen width
 function getTickLimit() {
-    return window.innerWidth < 768 ? 6 : 12; // Mobile: max 6 ticks, Desktop: max 12
+    if (window.innerWidth <= 360) return 4;
+    return window.innerWidth < 768 ? 6 : 12;
+}
+
+function isCompactMobileChart() {
+    return window.innerWidth <= 360;
+}
+
+function getChartLayoutPadding() {
+    if (isCompactMobileChart()) {
+        return {
+            left: 4,
+            right: 8,
+            top: 0,
+            bottom: 6
+        };
+    }
+
+    return {
+        left: 10,
+        right: 20,
+        top: 0,
+        bottom: 10
+    };
+}
+
+function getLegendLabelConfig(theme) {
+    const compact = isCompactMobileChart();
+
+    return {
+        usePointStyle: true,
+        boxWidth: compact ? 8 : 10,
+        boxHeight: compact ? 8 : 10,
+        padding: compact ? 8 : 12,
+        color: theme.textColor,
+        font: {
+            family: "'Inter', sans-serif",
+            size: compact ? 10 : 12,
+            weight: 500
+        }
+    };
+}
+
+function applyResponsiveChartOptions() {
+    if (!chartInstance) return;
+
+    const theme = document.body.classList.contains('light-mode') ? CHART_THEME.light : CHART_THEME.dark;
+
+    chartInstance.options.layout.padding = getChartLayoutPadding();
+    chartInstance.options.plugins.legend.labels = getLegendLabelConfig(theme);
+    chartInstance.options.scales.x.ticks.maxTicksLimit = getTickLimit();
+    chartInstance.options.scales.x.ticks.font = {
+        family: "'Inter', sans-serif",
+        size: isCompactMobileChart() ? 10 : 12
+    };
+    chartInstance.options.scales.y.ticks.font = {
+        family: "'Inter', sans-serif",
+        size: isCompactMobileChart() ? 10 : 12
+    };
 }
 
 // Theme configuration for the chart
@@ -116,12 +173,7 @@ window.App.initChart = function (canvasContext, isDarkMode = true, currency = 'U
             responsive: true,
             maintainAspectRatio: false,
             layout: {
-                padding: {
-                    left: 10,
-                    right: 20,
-                    top: 20,
-                    bottom: 10
-                }
+                padding: getChartLayoutPadding()
             },
             interaction: {
                 mode: 'index',
@@ -152,17 +204,7 @@ window.App.initChart = function (canvasContext, isDarkMode = true, currency = 'U
                 legend: {
                     position: 'top',
                     align: 'center',
-                    labels: {
-                        usePointStyle: true,
-                        boxWidth: 8,
-                        padding: 15,
-                        color: theme.textColor,
-                        font: {
-                            family: "'Inter', sans-serif",
-                            size: 12,
-                            weight: 500
-                        }
-                    }
+                    labels: getLegendLabelConfig(theme)
                 }
             },
             scales: {
@@ -175,13 +217,13 @@ window.App.initChart = function (canvasContext, isDarkMode = true, currency = 'U
                         maxTicksLimit: getTickLimit(),
                         color: theme.textColor,
                         font: {
-                            family: "'Inter', sans-serif"
+                            family: "'Inter', sans-serif",
+                            size: isCompactMobileChart() ? 10 : 12
                         },
                         callback: function (value, index, ticks) {
-                            // "Year X" label logic
                             const t = window.App.currentTranslation || (window.App.translations && window.App.translations['en']) || { year: 'Year' };
                             const label = this.getLabelForValue(value);
-                            return t.year + ' ' + label;
+                            return isCompactMobileChart() ? label : t.year + ' ' + label;
                         }
                     },
                 },
@@ -203,7 +245,8 @@ window.App.initChart = function (canvasContext, isDarkMode = true, currency = 'U
                             }).format(value);
                         },
                         font: {
-                            family: "'Inter', sans-serif"
+                            family: "'Inter', sans-serif",
+                            size: isCompactMobileChart() ? 10 : 12
                         }
                     },
                     stacked: false,
@@ -214,7 +257,17 @@ window.App.initChart = function (canvasContext, isDarkMode = true, currency = 'U
                 duration: 750,
                 easing: 'easeOutQuart'
             }
-        }
+        },
+        plugins: [{
+            id: 'legendMargin',
+            beforeInit(chart) {
+                const originalFit = chart.legend.fit;
+                chart.legend.fit = function fit() {
+                    originalFit.bind(chart.legend)();
+                    this.height += isCompactMobileChart() ? 18 : 30;
+                };
+            }
+        }]
     });
 };
 
@@ -338,7 +391,7 @@ window.App.updateChartTheme = function (isDarkMode) {
     chartInstance.options.plugins.tooltip.borderColor = theme.tooltipBorder;
 
     // Update Legend
-    chartInstance.options.plugins.legend.labels.color = theme.textColor;
+    chartInstance.options.plugins.legend.labels = getLegendLabelConfig(theme);
 
     // Update Scales
     chartInstance.options.scales.x.ticks.color = theme.textColor;
@@ -389,7 +442,7 @@ window.App.updateChartCurrency = function (currency) {
 // Add resize listener to handle responsive ticks
 window.addEventListener('resize', () => {
     if (chartInstance) {
-        chartInstance.options.scales.x.ticks.maxTicksLimit = getTickLimit();
+        applyResponsiveChartOptions();
         chartInstance.update('none'); // Update without animation for performance
     }
 });

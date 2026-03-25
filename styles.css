@@ -580,21 +580,38 @@ body {
     z-index: 1;
 }
 
+#app-header-section {
+    position: relative;
+    z-index: 9999;
+}
+
 .top-controls {
     /* Container for theme toggle and language selection */
-    position: absolute;
-    top: 0;
-    right: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 0.5rem;
-    z-index: 10;
+    z-index: 99999;
 }
 
-.top-controls:has(.open) {
-    z-index: 3000;
-    /* Ensure language dropdown is above everything when open */
+/* Ensure the language dropdown fits content and expands to the left instead of overflowing the screen */
+.top-controls #custom-language-select {
+    width: max-content;
+}
+
+.top-controls #custom-language-select .custom-options {
+    width: max-content;
+    min-width: 100%;
+    left: auto;
+    right: 0;
+}
+
+@media (min-width: 901px) {
+    #app-header-section > .github-btn {
+        display: flex;
+        width: fit-content;
+        margin: 1rem 0 0;
+    }
 }
 
 /*---------THEME TOGGLE SWITCH------------*/
@@ -674,10 +691,12 @@ body {
     /* White toggle in light mode */
     color: #f39c12;
     /* Sun color */
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 20px rgba(241, 196, 15, 0.45);
 }
 
 .theme-toggle-wrapper .stars {
     position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -817,6 +836,7 @@ body {
 
 .theme-toggle-wrapper .clouds {
     position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -830,57 +850,48 @@ body {
     fill: rgba(255, 255, 255, 0.8);
     transition: all 0.4s ease;
     filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.1));
+    will-change: left, opacity, transform;
+    overflow: visible;
 }
 
 .theme-toggle-wrapper .cloud1 {
     top: 8px;
-    left: 8px;
-    animation: floatCloud1 8s infinite linear;
+    left: -44px;
 }
 
 .theme-toggle-wrapper .cloud2 {
     top: 18px;
-    left: 30px;
-    transform: scale(0.7);
-    animation: floatCloud2 12s infinite linear;
+    left: -50px;
 }
 
 @keyframes floatCloud1 {
     0% {
-        transform: translateX(-60px);
-        opacity: 0;
-    }
-
-    20% {
+        left: -44px;
         opacity: 1;
     }
 
-    80% {
+    85% {
         opacity: 1;
     }
 
     100% {
-        transform: translateX(100px);
+        left: calc(100% + 10px);
         opacity: 0;
     }
 }
 
 @keyframes floatCloud2 {
     0% {
-        transform: translateX(-60px) scale(0.7);
-        opacity: 0;
+        left: -50px;
+        opacity: 0.85;
     }
 
-    20% {
-        opacity: 0.7;
-    }
-
-    80% {
-        opacity: 0.7;
+    82% {
+        opacity: 0.85;
     }
 
     100% {
-        transform: translateX(100px) scale(0.7);
+        left: calc(100% + 8px);
         opacity: 0;
     }
 }
@@ -888,20 +899,22 @@ body {
 /* Clouds hidden by default (dark mode), visible when checked (light mode) */
 .theme-toggle-wrapper .cloud {
     opacity: 0;
-    transform: translateY(-20px);
-    animation: none !important;
+    transform: translateY(-8px);
+    animation: none;
 }
 
 .theme-toggle-wrapper input:checked+.slider .cloud1 {
     opacity: 1;
+    left: -44px;
     transform: none;
-    animation: floatCloud1 8s infinite linear !important;
+    animation: floatCloud1 6s linear infinite both;
 }
 
 .theme-toggle-wrapper input:checked+.slider .cloud2 {
-    opacity: 1;
+    opacity: 0.85;
+    left: -50px;
     transform: scale(0.7);
-    animation: floatCloud2 12s infinite linear !important;
+    animation: floatCloud2 7.5s linear infinite 1s both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2126,7 +2139,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-md);
-    max-height: 250px;
+    max-height: 400px;
     overflow-y: auto;
     display: none;
     z-index: 101;
@@ -2198,9 +2211,12 @@ input[type="range"]::-webkit-slider-thumb:hover {
     justify-content: center;
 }
 
-.card:hover {
+.card:hover,
+.card:focus-within,
+.card:has([data-tooltip]:hover) {
     transform: translateY(-4px);
     box-shadow: var(--shadow-md);
+    z-index: 100 !important; /* Force hovered card to the absolute top so its tooltip overlays siblings */
 }
 
 /* Individual Card Styling */
@@ -2326,6 +2342,13 @@ input[type="range"]::-webkit-slider-thumb:hover {
     line-height: 1.4;
 }
 
+/* Because cards are frequently rendered near the right edge of the screen, force their tooltips to anchor right and expand leftwards so they never bleed off-screen */
+.card [data-tooltip]::before {
+    left: auto;
+    right: -15px; /* Box edge just past the 'i' icon */
+    transform: none; /* Strip the -50% centering */
+}
+
 /* Tooltip arrow/pointer */
 [data-tooltip]::after {
     content: '';
@@ -2353,6 +2376,14 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .status-side {
     /* Section for milestones and secondary results */
     grid-area: status;
+}
+
+.status-side--mobile-only {
+    display: none;
+}
+
+.status-side--desktop-only {
+    display: block;
 }
 
 @media (max-width: 1200px) {
@@ -2403,6 +2434,11 @@ input[type="range"]::-webkit-slider-thumb:hover {
     font-size: 0.875rem;
     font-weight: 500;
     transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    line-height: 1.2;
 }
 
 .chart-type-btn.active {
@@ -2485,13 +2521,18 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 #milestones-list,
-#extra-milestones-list {
+#extra-milestones-list,
+#milestones-list-desktop,
+#extra-milestones-list-desktop {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 #milestones-list li,
-#extra-milestones-list li {
+#extra-milestones-list li,
+#milestones-list-desktop li,
+#extra-milestones-list-desktop li {
     background: var(--bg-body);
     padding: 1rem;
     border-radius: var(--radius-md);
@@ -2501,7 +2542,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 #milestones-list li:hover,
-#extra-milestones-list li:hover {
+#extra-milestones-list li:hover,
+#milestones-list-desktop li:hover,
+#extra-milestones-list-desktop li:hover {
     transform: translateX(4px);
     border-color: var(--primary-color);
 }
@@ -2540,7 +2583,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
     color: var(--text-secondary);
 }
 
-#extra-milestones-container.expanded {
+#extra-milestones-container.expanded,
+#extra-milestones-container-desktop.expanded {
     margin-top: 0;
     /* Keep it tight with the main list */
 }
@@ -2811,14 +2855,15 @@ body.light-mode .disclaimer-text {
     /* Base Container Adjustments */
     html,
     body {
-        overflow-x: hidden;
+        overflow-x: clip;
+        /* clip (not hidden) so position:fixed children still anchor to viewport */
         max-width: 100vw;
         width: 100%;
     }
 
     .app-container {
         padding: var(--mobile-app-padding);
-        overflow-x: hidden;
+        overflow-x: clip;
         width: 100%;
         max-width: 100vw;
     }
@@ -2844,8 +2889,9 @@ body.light-mode .disclaimer-text {
 
     #app-header-section {
         margin-bottom: var(--mobile-header-margin-bottom);
-        padding-right: var(--mobile-header-padding-right);
+        padding-right: 170px; /* Increased from 120px to comfortably clear the button */
     }
+
 
     #app-header-section h1 {
         font-size: var(--mobile-header-title-size);
@@ -2861,40 +2907,71 @@ body.light-mode .disclaimer-text {
         margin-bottom: 0.25rem;
     }
 
-    /* Shrink the top controls (theme / language) and put them in flow */
+    /* Top controls sit at the top right of the header and scroll away naturally */
     .top-controls {
-        position: relative;
-        /* Prevent overlap on tabs where header is hidden */
-        top: auto;
-        right: auto;
+        position: absolute;
+        top: 0;
+        right: 0;
         display: flex;
-        justify-content: flex-end;
+        flex-direction: column;
+        align-items: flex-end;
         gap: var(--mobile-toggles-gap);
         z-index: 1000;
         transform: scale(var(--mobile-toggles-scale));
         transform-origin: top right;
-        margin-bottom: 0.5rem;
     }
 
-    /* On Tab 1 (graph view), float the controls absolutely so the title
-       starts at the very top-left without being pushed down */
-    body[data-active-tab="1"] .top-controls {
-        position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        margin-bottom: 0;
-        height: 0;
-        overflow: visible;
+    /* Prevent the 1.1 scale jump when touched/highlighted on mobile */
+    .top-controls .toggle-switch:hover,
+    .top-controls .toggle-switch:active {
+        transform: scale(1.0) !important;
     }
 
-    /* Make GitHub button compact on mobile */
-    .github-btn {
+    /* Make the language selector naturally fit its text */
+    .top-controls #custom-language-select {
+        width: max-content;
+    }
+
+    .top-controls .selected-option {
+        font-size: 0.9rem;
         padding: 0.5rem 0.75rem;
+        min-height: unset !important;
+    }
+
+    /* Dropdown uses standard absolute positioning. 
+       Since .top-controls is fixed and z-index 99999, this will overlap the entire page automatically */
+    #custom-language-select .custom-options {
+        width: max-content;
+        min-width: 100%;
+        left: auto;
+        right: 0;
+        max-height: 55vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+
+
+    /* Make GitHub button compact on mobile - scaled to 75% */
+    .github-btn {
+        position: relative;
+        top: auto;
+        right: auto;
+        padding: 0.5rem 0.75rem;
+        transform: scale(0.75);
+        transform-origin: top left;
+    }
+
+    .github-btn:hover {
+        transform: scale(0.86); /* 0.75 * 1.15 */
+    }
+
+    .github-btn:active {
+        transform: scale(0.71); /* 0.75 * 0.95 */
     }
 
     .gh-label {
-        display: none;
-        /* Only show icon and stars on tight mobile */
+        display: inline; /* Show label text on mobile */
     }
 
     /* Stack grid properly */
@@ -2909,6 +2986,10 @@ body.light-mode .disclaimer-text {
         position: relative;
         text-align: left;
         padding-right: 0;
+        z-index: 99999;
+        overflow: visible !important;
+        transform: translateZ(0);
+        /* Force hardware layer for Safari z-index bug */
     }
 
     #app-header-section .header-content {
@@ -2917,13 +2998,7 @@ body.light-mode .disclaimer-text {
         gap: 0.25rem;
     }
 
-    #app-header-section .header-content .top-controls {
-        position: absolute;
-        top: 0;
-        right: 0;
-        margin-left: 0;
-        flex-shrink: 0;
-    }
+
 
     /* Tab View Logic */
     body [data-tab-content]:not(.tab-active) {
@@ -2960,7 +3035,10 @@ body.light-mode .disclaimer-text {
         flex-wrap: nowrap;
         gap: var(--mobile-cards-gap) !important;
         width: 100%;
-        overflow: hidden !important;
+        overflow: visible !important;
+        padding-top: 5px;
+        /* added vertical padding for scaled card */
+        padding-bottom: 5px;
     }
 
     /* Ensure only 3 main boxes are kept side-by-side */
@@ -2991,7 +3069,8 @@ body.light-mode .disclaimer-text {
         text-align: center;
         word-break: break-word;
         hyphens: auto;
-        overflow: hidden;
+        overflow: visible !important; /* Allow tooltips to float freely outside the box */
+        z-index: 1 !important;
     }
 
     .card h3 {
@@ -2999,6 +3078,13 @@ body.light-mode .disclaimer-text {
         margin-bottom: 0.25rem;
         white-space: normal;
         line-height: 1.1;
+    }
+
+    /* Prevent huge tooltips from bleeding off the edge of the mobile screen */
+    [data-tooltip]::before {
+        width: 160px;
+        font-size: 0.7rem;
+        padding: 0.4rem 0.5rem;
     }
 
     .card p.value {
@@ -3089,18 +3175,27 @@ body.light-mode .disclaimer-text {
         opacity: 1 !important;
     }
 
+    .status-side--mobile-only {
+        display: block;
+    }
+
+    .status-side--desktop-only {
+        display: none;
+    }
+
     #show-more-milestones-btn {
         display: none !important;
     }
 
     .table-header-grid {
-        display: none;
-        /* Hide grid header component */
+        display: grid;
+        font-size: clamp(0.55rem, 2.5vw, 0.7rem);
+        padding: clamp(0.5rem, 2vw, 0.8rem) clamp(0.2rem, 1.2vw, 0.5rem);
     }
 
     .table-scroll-area {
         overflow-x: auto;
-        overflow-y: hidden;
+        overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         border-radius: var(--radius-md);
         display: block;
@@ -3127,7 +3222,7 @@ body.light-mode .disclaimer-text {
 
     #breakdown-table-container {
         width: 100%;
-        overflow: hidden;
+        overflow: visible;
         box-sizing: border-box;
     }
 
@@ -3191,11 +3286,42 @@ body.light-mode .disclaimer-text {
         padding: 0.5rem 0;
     }
 
+    @keyframes mobile-tab-float {
+        0%, 100% {
+            transform: translateY(-8px) scale(1);
+        }
+
+        50% {
+            transform: translateY(-11px) scale(1.06);
+        }
+    }
+
+    @keyframes mobile-tab-glow {
+        0%, 100% {
+            filter: drop-shadow(0 0 0 rgba(99, 102, 241, 0));
+        }
+
+        50% {
+            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.45));
+        }
+    }
+
+    @keyframes mobile-indicator-pulse {
+        0%, 100% {
+            transform: translateY(var(--indicator-circle-y)) scale(1) translateZ(0);
+            opacity: 0.95;
+        }
+
+        50% {
+            transform: translateY(calc(var(--indicator-circle-y) - 1px)) scale(1.16) translateZ(0);
+            opacity: 1;
+        }
+    }
+
     /* Tab Bar Styles translated from SCSS */
     #tabbar {
         display: block;
         --c-color: var(--mobile-tab-active-color);
-        /* Active blue color */
         --c-background: var(--bg-card);
         --indicator-x: 34px;
         --indicator-circle-o: 1;
@@ -3206,12 +3332,23 @@ body.light-mode .disclaimer-text {
         position: fixed;
         bottom: 0;
         left: 0;
-        transform: none;
         background: var(--c-background);
         z-index: 5000;
         box-shadow: var(--shadow-xl), 0 -10px 30px rgba(0, 0, 0, 0.4);
         width: 100%;
         max-width: 100%;
+    }
+
+    #tabbar::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--primary-color) 70%, white), transparent);
+        opacity: 0.65;
+        z-index: 2;
     }
 
     body.light-mode #tabbar {
@@ -3228,7 +3365,7 @@ body.light-mode .disclaimer-text {
         height: 72px;
         fill: var(--c-color);
         transform: translateX(var(--indicator-x));
-        transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+        transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     #tabbar .indicator path {
@@ -3239,6 +3376,7 @@ body.light-mode .disclaimer-text {
         opacity: var(--indicator-circle-o);
         transform: translateY(var(--indicator-circle-y)) translateZ(0);
         transition: transform 0.4s, opacity 0.4s;
+        animation: mobile-indicator-pulse 2.2s ease-in-out infinite;
     }
 
     #tabbar ul {
@@ -3265,7 +3403,7 @@ body.light-mode .disclaimer-text {
 
     #tabbar ul li.active {
         --icon-circle: 28px;
-        --icon-y: -22px;
+        --icon-y: -8px;
     }
 
     #tabbar ul li button {
@@ -3282,7 +3420,7 @@ body.light-mode .disclaimer-text {
         -webkit-appearance: none;
         appearance: none;
         transform: translateY(var(--icon-y)) scale(var(--icon-s)) translateZ(0);
-        transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+        transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), filter 0.25s ease;
     }
 
     #tabbar ul li button:before {
@@ -3303,17 +3441,22 @@ body.light-mode .disclaimer-text {
         clip-path: circle(28px at 50% 100%);
     }
 
+    #tabbar ul li button:active {
+        transform: translateY(-3px) scale(0.96) translateZ(0);
+    }
+
     #tabbar ul li button svg.tab-icon {
         color: var(--text-secondary);
         display: block;
         overflow: visible;
         width: 28px;
         height: 28px;
-        transition: color 0.4s;
+        transition: color 0.35s ease, filter 0.35s ease;
     }
 
     #tabbar ul li.active button svg.tab-icon {
         color: var(--c-color);
+        animation: mobile-tab-glow 2.4s ease-in-out infinite;
     }
 
     #tabbar ul li button svg.tab-icon:last-child {
@@ -3322,10 +3465,124 @@ body.light-mode .disclaimer-text {
         top: 0;
         left: 0;
         clip-path: circle(0px at 50% 100%);
-        transition: clip-path 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+        transition: clip-path 0.55s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     #tabbar ul li.active button svg.tab-icon:last-child {
         clip-path: circle(28px at 50% 100%);
+    }
+
+    #tabbar ul li.active button {
+        animation: mobile-tab-float 2.6s ease-in-out infinite;
+    }
+
+    #tabbar ul li button:focus-visible {
+        outline: none;
+        filter: drop-shadow(0 0 8px color-mix(in srgb, var(--primary-color) 45%, transparent));
+    }
+
+    /* Hide the 4th tab (milestones) — it now lives inside tab 3 */
+    #tabbar ul li[data-tab-index="3"] {
+        display: none !important;
+    }
+
+    /* Milestones inside tab 3 should be full-width like the table above it */
+    .details-section .status-side {
+        width: 100%;
+        margin-top: 1.5rem;
+    }
+
+    .details-section .status-side .milestones-container {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+@media (max-width: 360px) {
+    body {
+        padding: 0.35rem;
+        padding-bottom: 92px;
+    }
+
+    .app-container {
+        padding: 0.15rem;
+    }
+
+    .controls-panel {
+        padding: 1rem;
+    }
+
+    .top-controls {
+        transform: scale(0.56);
+    }
+
+    .top-controls .custom-select-wrapper {
+        width: 132px;
+    }
+
+    .top-controls .selected-option {
+        font-size: 0.72rem;
+        padding: 0.35rem 0.55rem;
+    }
+
+    .github-btn {
+        transform: scale(0.64);
+        margin-top: 0.2rem;
+    }
+
+    .github-btn:hover {
+        transform: scale(0.7);
+    }
+
+    .github-btn:active {
+        transform: scale(0.61);
+    }
+
+    .gh-label {
+        display: none;
+    }
+
+    .github-btn .gh-star-group {
+        margin-left: 0.35rem;
+    }
+
+    .input-wrapper .currency-select,
+    .input-wrapper .custom-currency-select {
+        width: 78px;
+    }
+
+    .input-wrapper #initial-investment {
+        padding-right: 92px;
+    }
+
+    .currency-options {
+        width: 148px;
+    }
+
+    .standard-cards-wrapper {
+        gap: 0.2rem !important;
+    }
+
+    .card h3 {
+        line-height: 1.05;
+    }
+
+    .chart-controls {
+        flex-direction: column;
+    }
+
+    .chart-type-btn {
+        width: 100%;
+        font-size: 0.7rem;
+        padding: 0.45rem 0.35rem;
+    }
+
+    .table-header-grid {
+        font-size: 0.52rem;
+    }
+
+    .breakdown-table th,
+    .breakdown-table td {
+        font-size: 0.58rem;
     }
 }

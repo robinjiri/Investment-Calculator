@@ -42,6 +42,11 @@ const milestonesList = document.getElementById('milestones-list');
 const extraMilestonesContainer = document.getElementById('extra-milestones-container');
 const extraMilestonesList = document.getElementById('extra-milestones-list');
 const showMoreMilestonesBtn = document.getElementById('show-more-milestones');
+const milestonesContainerDesktop = document.getElementById('milestones-container-desktop');
+const milestonesListDesktop = document.getElementById('milestones-list-desktop');
+const extraMilestonesContainerDesktop = document.getElementById('extra-milestones-container-desktop');
+const extraMilestonesListDesktop = document.getElementById('extra-milestones-list-desktop');
+const showMoreMilestonesBtnDesktop = document.getElementById('show-more-milestones-desktop');
 const fireContainer = document.getElementById('fire-container');
 const fireStatusContent = document.getElementById('fire-status-content');
 const includeFireCheckbox = document.getElementById('include-fire');
@@ -476,6 +481,7 @@ function attachEventListeners() {
 
     // Milestones Toggle
     showMoreMilestonesBtn.addEventListener('click', toggleExtraMilestones);
+    showMoreMilestonesBtnDesktop.addEventListener('click', toggleExtraMilestones);
 
     // Tab Bar Navigation Logic
     const tabbar = document.getElementById('tabbar');
@@ -1126,10 +1132,14 @@ function toggleExtraMilestones() {
     
     if (isExpanded) {
         extraMilestonesContainer.classList.remove('expanded');
+        extraMilestonesContainerDesktop.classList.remove('expanded');
         showMoreMilestonesBtn.textContent = t.showAllMilestones;
+        showMoreMilestonesBtnDesktop.textContent = t.showAllMilestones;
     } else {
         extraMilestonesContainer.classList.add('expanded');
+        extraMilestonesContainerDesktop.classList.add('expanded');
         showMoreMilestonesBtn.textContent = t.showLess;
+        showMoreMilestonesBtnDesktop.textContent = t.showLess;
     }
 }
 
@@ -1147,9 +1157,13 @@ function checkMilestones(portfolioValueData) {
     const t = window.App.currentTranslation || window.App.translations['en'];
     
     milestonesList.innerHTML = '';
+    milestonesListDesktop.innerHTML = '';
     extraMilestonesList.innerHTML = '';
+    extraMilestonesListDesktop.innerHTML = '';
     extraMilestonesContainer.classList.remove('expanded');
+    extraMilestonesContainerDesktop.classList.remove('expanded');
     showMoreMilestonesBtn.textContent = t.showAllMilestones;
+    showMoreMilestonesBtnDesktop.textContent = t.showAllMilestones;
 
     const baseMilestones = [
         { value: 100000, label: '100k', emoji: '💰' },
@@ -1195,8 +1209,6 @@ function checkMilestones(portfolioValueData) {
         const yearIndex = portfolioValueData.findIndex(val => val >= milestone.value);
         if (yearIndex !== -1) {
             foundMilestones = true;
-            const li = document.createElement('li');
-            
             // Randomize emojis for > 1M
             let emoji = milestone.emoji;
             if (milestone.value > 1000000 && !milestone.isFire) {
@@ -1207,7 +1219,7 @@ function checkMilestones(portfolioValueData) {
             // For FIRE, show full capital name if label is short
             const milestoneLabel = milestone.isFire ? milestone.label : `${symbol}${milestone.label}`;
 
-            li.innerHTML = `
+            const milestoneMarkup = `
                 <div class="milestone-item">
                     <span class="milestone-icon">${emoji}</span>
                     <div class="milestone-content">
@@ -1218,23 +1230,37 @@ function checkMilestones(portfolioValueData) {
             `;
             
             if (milestone.value <= 1000000) {
+                const li = document.createElement('li');
+                li.innerHTML = milestoneMarkup;
                 milestonesList.appendChild(li);
+                const desktopLi = document.createElement('li');
+                desktopLi.innerHTML = milestoneMarkup;
+                milestonesListDesktop.appendChild(desktopLi);
             } else {
                 hasExtra = true;
+                const li = document.createElement('li');
+                li.innerHTML = milestoneMarkup;
                 extraMilestonesList.appendChild(li);
+                const desktopLi = document.createElement('li');
+                desktopLi.innerHTML = milestoneMarkup;
+                extraMilestonesListDesktop.appendChild(desktopLi);
             }
         }
     });
 
     if (foundMilestones) {
         milestonesContainer.classList.remove('hidden');
+        milestonesContainerDesktop.classList.remove('hidden');
         if (hasExtra) {
             showMoreMilestonesBtn.classList.remove('hidden');
+            showMoreMilestonesBtnDesktop.classList.remove('hidden');
         } else {
             showMoreMilestonesBtn.classList.add('hidden');
+            showMoreMilestonesBtnDesktop.classList.add('hidden');
         }
     } else {
         milestonesContainer.classList.add('hidden');
+        milestonesContainerDesktop.classList.add('hidden');
     }
 }
 
