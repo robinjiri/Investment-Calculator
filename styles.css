@@ -2200,6 +2200,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .card {
+    height: var(--mobile-card-height, auto);
     background: var(--bg-card);
     padding: 1.5rem;
     border-radius: var(--radius-lg);
@@ -2813,11 +2814,12 @@ body.light-mode .disclaimer-text {
         --mobile-toggles-gap: clamp(0.25rem, 1.5vw, 1rem);
 
         /* Summary 3-Boxes Layout */
+        --mobile-card-height: clamp(6rem, 12vh, 8.5rem);
         --mobile-cards-gap: clamp(0.15rem, 1vw, 0.5rem);
         --mobile-card-width: 33.333%;
-        --mobile-card-padding: clamp(0.25rem, 1.5vh, 0.75rem) clamp(0.1rem, 0.5vw, 0.5rem);
+        --mobile-card-padding: clamp(0.15rem, 0.8vh, 0.4rem) clamp(0.1rem, 0.5vw, 0.5rem);
         --mobile-card-title-size: clamp(0.5rem, 2.8vw, 0.75rem);
-        --mobile-card-value-size: clamp(0.7rem, 4.5vw, 1.1rem);
+        --mobile-card-value-size: clamp(0.4rem, 3vw, 0.8rem);
         --mobile-card-percent-size: clamp(0.6rem, 3.2vw, 0.8rem);
 
         /* Chart */
@@ -2904,7 +2906,7 @@ body.light-mode .disclaimer-text {
         font-size: var(--mobile-header-desc-size);
         text-align: left;
         margin-top: 0.25rem;
-        margin-bottom: 0.25rem;
+        margin-bottom: 0.15rem;
     }
 
     /* Top controls sit at the top right of the header and scroll away naturally */
@@ -3036,9 +3038,9 @@ body.light-mode .disclaimer-text {
         gap: var(--mobile-cards-gap) !important;
         width: 100%;
         overflow: visible !important;
-        padding-top: 5px;
+        padding-top: 1px;
         /* added vertical padding for scaled card */
-        padding-bottom: 5px;
+        padding-bottom: 1px;
     }
 
     /* Ensure only 3 main boxes are kept side-by-side */
@@ -3056,7 +3058,7 @@ body.light-mode .disclaimer-text {
     .summary-cards.with-fire .card.portfolio,
     .summary-cards.with-fire .card.profit,
     .summary-cards.with-fire .card.fire {
-        height: auto !important;
+        height: var(--mobile-card-height) !important;
         min-height: auto;
         padding: var(--mobile-card-padding) !important;
         width: var(--mobile-card-width) !important;
@@ -3089,6 +3091,8 @@ body.light-mode .disclaimer-text {
 
     .card p.value {
         font-size: var(--mobile-card-value-size) !important;
+        line-height: 1.05;
+        word-break: break-word;
     }
 
     .profit-percent {
@@ -3286,38 +3290,6 @@ body.light-mode .disclaimer-text {
         padding: 0.5rem 0;
     }
 
-    @keyframes mobile-tab-float {
-        0%, 100% {
-            transform: translateY(-8px) scale(1);
-        }
-
-        50% {
-            transform: translateY(-11px) scale(1.06);
-        }
-    }
-
-    @keyframes mobile-tab-glow {
-        0%, 100% {
-            filter: drop-shadow(0 0 0 rgba(99, 102, 241, 0));
-        }
-
-        50% {
-            filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.45));
-        }
-    }
-
-    @keyframes mobile-indicator-pulse {
-        0%, 100% {
-            transform: translateY(var(--indicator-circle-y)) scale(1) translateZ(0);
-            opacity: 0.95;
-        }
-
-        50% {
-            transform: translateY(calc(var(--indicator-circle-y) - 1px)) scale(1.16) translateZ(0);
-            opacity: 1;
-        }
-    }
-
     /* Tab Bar Styles translated from SCSS */
     #tabbar {
         display: block;
@@ -3337,6 +3309,8 @@ body.light-mode .disclaimer-text {
         box-shadow: var(--shadow-xl), 0 -10px 30px rgba(0, 0, 0, 0.4);
         width: 100%;
         max-width: 100%;
+        transform: translateZ(0);
+        will-change: transform;
     }
 
     #tabbar::before {
@@ -3365,7 +3339,8 @@ body.light-mode .disclaimer-text {
         height: 72px;
         fill: var(--c-color);
         transform: translateX(var(--indicator-x));
-        transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        will-change: transform;
     }
 
     #tabbar .indicator path {
@@ -3376,7 +3351,6 @@ body.light-mode .disclaimer-text {
         opacity: var(--indicator-circle-o);
         transform: translateY(var(--indicator-circle-y)) translateZ(0);
         transition: transform 0.4s, opacity 0.4s;
-        animation: mobile-indicator-pulse 2.2s ease-in-out infinite;
     }
 
     #tabbar ul {
@@ -3404,6 +3378,7 @@ body.light-mode .disclaimer-text {
     #tabbar ul li.active {
         --icon-circle: 28px;
         --icon-y: -8px;
+        --icon-s: 1.04;
     }
 
     #tabbar ul li button {
@@ -3420,7 +3395,9 @@ body.light-mode .disclaimer-text {
         -webkit-appearance: none;
         appearance: none;
         transform: translateY(var(--icon-y)) scale(var(--icon-s)) translateZ(0);
-        transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), filter 0.25s ease;
+        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        backface-visibility: hidden;
+        will-change: transform;
     }
 
     #tabbar ul li button:before {
@@ -3434,7 +3411,7 @@ body.light-mode .disclaimer-text {
         border-radius: 50%;
         background: var(--c-background);
         clip-path: circle(0px at 50% 100%);
-        transition: clip-path 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+        transition: clip-path 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
     }
 
     #tabbar ul li.active button:before {
@@ -3451,12 +3428,12 @@ body.light-mode .disclaimer-text {
         overflow: visible;
         width: 28px;
         height: 28px;
-        transition: color 0.35s ease, filter 0.35s ease;
+        transition: color 0.25s ease;
+        backface-visibility: hidden;
     }
 
     #tabbar ul li.active button svg.tab-icon {
         color: var(--c-color);
-        animation: mobile-tab-glow 2.4s ease-in-out infinite;
     }
 
     #tabbar ul li button svg.tab-icon:last-child {
@@ -3465,15 +3442,11 @@ body.light-mode .disclaimer-text {
         top: 0;
         left: 0;
         clip-path: circle(0px at 50% 100%);
-        transition: clip-path 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+        transition: clip-path 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     #tabbar ul li.active button svg.tab-icon:last-child {
         clip-path: circle(28px at 50% 100%);
-    }
-
-    #tabbar ul li.active button {
-        animation: mobile-tab-float 2.6s ease-in-out infinite;
     }
 
     #tabbar ul li button:focus-visible {
@@ -3526,24 +3499,30 @@ body.light-mode .disclaimer-text {
     }
 
     .github-btn {
-        transform: scale(0.64);
+        transform: scale(0.68);
         margin-top: 0.2rem;
+        transform-origin: top left;
     }
 
     .github-btn:hover {
-        transform: scale(0.7);
+        transform: scale(0.74);
     }
 
     .github-btn:active {
-        transform: scale(0.61);
+        transform: scale(0.65);
     }
 
     .gh-label {
-        display: none;
+        display: inline;
+        font-size: 0.72rem;
     }
 
     .github-btn .gh-star-group {
-        margin-left: 0.35rem;
+        margin-left: 0.2rem;
+    }
+
+    .github-btn .gh-star-count {
+        font-size: 0.72rem;
     }
 
     .input-wrapper .currency-select,

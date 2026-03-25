@@ -84,6 +84,16 @@ function applyResponsiveChartOptions() {
     };
 }
 
+function clearChartInteraction() {
+    if (!chartInstance) return;
+
+    chartInstance.setActiveElements([]);
+    if (chartInstance.tooltip) {
+        chartInstance.tooltip.setActiveElements([], { x: 0, y: 0 });
+    }
+    chartInstance.update('none');
+}
+
 // Theme configuration for the chart
 const CHART_THEME = {
     dark: {
@@ -269,6 +279,15 @@ window.App.initChart = function (canvasContext, isDarkMode = true, currency = 'U
             }
         }]
     });
+
+    const chartCanvas = canvasContext.canvas;
+    chartCanvas.addEventListener('touchend', () => {
+        requestAnimationFrame(clearChartInteraction);
+    }, { passive: true });
+    chartCanvas.addEventListener('touchcancel', clearChartInteraction, { passive: true });
+    chartCanvas.addEventListener('mouseleave', clearChartInteraction);
+    chartCanvas.addEventListener('pointerleave', clearChartInteraction);
+    window.addEventListener('scroll', clearChartInteraction, { passive: true });
 };
 
 /**

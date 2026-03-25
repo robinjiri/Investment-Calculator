@@ -2,15 +2,25 @@
 
 ![License](https://img.shields.io/badge/license-CC--BY--NC--SA-blue)
 ![Made with](https://img.shields.io/badge/Made%20with-JavaScript-yellow)
+![Platform](https://img.shields.io/badge/hosted%20on-Cloudflare-orange)
 [![Live Demo](https://img.shields.io/badge/demo-online-green)](https://investmentcalculator.pomerancee.workers.dev)
 ![Open Source](https://img.shields.io/badge/Open%20Source-Yes-brightgreen)
+![Responsive](https://img.shields.io/badge/mobile-friendly-blue)
+![GitHub stars](https://img.shields.io/github/stars/robinjiri/Investment-Calculator)
 
 A modern, minimalist investment calculator designed to project long-term portfolio growth without ads or tracking.
 
 [**Live Demo**](https://investmentcalculator.pomerancee.workers.dev) | [**License**](#license)
 
 ## Preview
+
+Desktop preview
+
 ![Calculator Screenshot](screenshot.png)
+
+Phone preview
+
+![Calculator Mobile-screenshot](screenshot-mobile.png)
 
 ---
 
@@ -27,6 +37,7 @@ I wanted to create a tool that is **fast**, **modern**, **beginner-friendly**, k
 *   **FIRE (Financial Independence, Retire Early) Calculator:** Estimate how much capital is needed to retire early based on user expenses and a safe withdrawal percentage.
 *   **Year-by-year breakdown:** Show Total Invested, Interest Earned, and Total Balance each year.
 *   **Privacy First:** All calculations are done locally in the user's browser. No data is sent to any server.
+*   **New Phone enhanced UI** Added mobile UI with bottom navigation and optimized layout for better usability on smaller devices
 
 ### Additional Features
 *  **Benchmark Tracker:** Compare the last used parameters with new ones.
