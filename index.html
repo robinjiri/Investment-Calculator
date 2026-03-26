@@ -30,7 +30,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=2">
+    <link rel="stylesheet" href="css/styles.css?v=2">
     <link rel="icon" type="image/x-icon" href="https://investmentcalculator.pomerancee.workers.dev/favicon.ico">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -56,7 +56,7 @@
                 <!-- Controls inside header -->
                 <div class="top-controls">
                     <div class="theme-toggle-wrapper">
-                        <label class="toggle-switch" id="theme-toggle" title="Toggle light/dark mode">
+                        <label class="toggle-switch" id="theme-toggle" title="Switch to Light Mode" aria-label="Switch to Light Mode">
                             <input type="checkbox" id="theme-toggle-input">
                             <span class="slider">
                                 <span class="stars">
@@ -113,7 +113,7 @@
 
             <!-- GitHub button – between header and controls -->
             <a href="https://github.com/robinjiri/Investment-Calculator" target="_blank" rel="noopener noreferrer"
-                class="github-btn" title="Star on GitHub">
+                class="github-btn" title="GitHub page" aria-label="GitHub page" data-i18n-title="githubPage" data-i18n-aria-label="githubPage">
                 <span class="gh-inner">
                     <svg class="gh-logo" viewBox="0 0 438.549 438.549" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -137,6 +137,11 @@
         <main class="calculator-grid">
             <!-- Left Panel: Controls -->
             <section class="controls-panel" data-tab-content="1">
+                <svg class="controls-panel-border" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="controls-panel-border-track" pathLength="100"></path>
+                    <path class="controls-panel-border-wave" pathLength="100"></path>
+                    <path class="controls-panel-border-wave controls-panel-border-wave-secondary" pathLength="100"></path>
+                </svg>
                 <div id="controls-content" class="controls-content">
                     <div class="input-group">
                         <label for="initial-investment">
@@ -440,19 +445,19 @@
 
                 <div class="chart-header tab-active" data-tab-content="0">
                     <h2 class="graph-title" data-i18n="graphTitle">Investment Growth Projection</h2>
-                    <div class="chart-controls">
-                        <button id="chart-type-line" class="chart-type-btn active">
-                            <span data-i18n="lineChart">Portfolio value</span>
-                            <span class="tooltip-trigger" data-tooltip="portfolioValueTooltip">i</span>
-                        </button>
-                        <button id="chart-type-area" class="chart-type-btn">
-                            <span data-i18n="areaChart">compound interest</span>
-                            <span class="tooltip-trigger" data-tooltip="compoundInterestTooltip">i</span>
-                        </button>
-                    </div>
                 </div>
 
                 <div class="chart-container tab-active" data-tab-content="0">
+                    <div class="chart-overlay-bar">
+                        <div id="chart-overlay-legend" class="chart-overlay-legend"></div>
+                        <div class="chart-visual-toggle chart-visual-toggle--overlay">
+                            <label class="container" id="growth-visual-toggle-control" title="Yearly profit comparison view" aria-label="Yearly profit comparison view">
+                                <input type="checkbox" id="growth-visual-toggle" checked>
+                                <span class="checkmark"></span>
+                            </label>
+                            <span class="tooltip-trigger" data-tooltip="advancedGrowthViewTooltip" data-tooltip-content="Shows a hybrid growth view with yearly profit segments, cumulative interest, and the first year interest beats yearly deposits.">i</span>
+                        </div>
+                    </div>
                     <canvas id="growthChart"></canvas>
                 </div>
 
@@ -504,6 +509,8 @@
                             data-i18n="showMoreMilestones">Show More Milestones</button>
                     </div>
                 </div>
+            </section>
+        </main>
 
 
 
@@ -512,7 +519,7 @@
             <ul>
                 <!-- Tab 0: Chart / Graph -->
                 <li class="active" data-tab-index="0">
-                    <button type="button" aria-label="Growth chart" title="Growth chart">
+                    <button type="button" aria-label="Investment Growth Projection" title="Investment Growth Projection" data-i18n-aria-label="graphTitle" data-i18n-title="graphTitle">
                         <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M3 19.5H21"/>
                             <path d="M5 16.5L9 12.5L13 14.5L18 8.5L21 10"/>
@@ -531,7 +538,7 @@
                 </li>
                 <!-- Tab 1: Calculator / Inputs -->
                 <li data-tab-index="1">
-                    <button type="button" aria-label="Calculator settings" title="Calculator settings">
+                    <button type="button" aria-label="Calculator Settings" title="Calculator Settings" data-i18n-aria-label="calculatorSettings" data-i18n-title="calculatorSettings">
                         <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="4" y="2" width="16" height="20" rx="2"/>
                             <line x1="8" y1="7" x2="16" y2="7"/>
@@ -548,7 +555,7 @@
                 </li>
                 <!-- Tab 2: Table / Year-by-Year Breakdown -->
                 <li data-tab-index="2">
-                    <button type="button" aria-label="Year by year breakdown" title="Year by year breakdown">
+                    <button type="button" aria-label="Show Year-by-Year Breakdown" title="Show Year-by-Year Breakdown" data-i18n-aria-label="showBreakdown" data-i18n-title="showBreakdown">
                         <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="3" width="18" height="18" rx="2"/>
                             <line x1="3" y1="9" x2="21" y2="9"/>
@@ -565,7 +572,7 @@
                 </li>
                 <!-- Tab 3: Milestones (hidden on mobile, merged into tab 2) -->
                 <li data-tab-index="3">
-                    <button type="button" aria-label="Milestones" title="Milestones">
+                    <button type="button" aria-label="Milestones Reached" title="Milestones Reached" data-i18n-aria-label="milestonesReached" data-i18n-title="milestonesReached">
                         <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M8 21h8"/><path d="M12 17v4"/>
                             <path d="M17 4v8a5 5 0 0 1-10 0V4"/>

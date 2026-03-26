@@ -14,11 +14,11 @@ A modern, minimalist investment calculator designed to project long-term portfol
 
 ## Preview
 
-Desktop preview
+### Desktop preview
 
 ![Calculator Screenshot](screenshot.png)
 
-Phone preview
+###Phone preview
 
 ![Calculator Mobile-screenshot](screenshot-mobile.png)
 
@@ -37,7 +37,7 @@ I wanted to create a tool that is **fast**, **modern**, **beginner-friendly**, k
 *   **FIRE (Financial Independence, Retire Early) Calculator:** Estimate how much capital is needed to retire early based on user expenses and a safe withdrawal percentage.
 *   **Year-by-year breakdown:** Show Total Invested, Interest Earned, and Total Balance each year.
 *   **Privacy First:** All calculations are done locally in the user's browser. No data is sent to any server.
-*   **New Phone enhanced UI** Added mobile UI with bottom navigation and optimized layout for better usability on smaller devices
+*   **New: Enhanced mobile UI** Added mobile UI with bottom navigation and optimized layout for better usability on smaller devices
 
 ### Additional Features
 *  **Benchmark Tracker:** Compare the last used parameters with new ones.
@@ -46,9 +46,9 @@ I wanted to create a tool that is **fast**, **modern**, **beginner-friendly**, k
 *  **PDF Export:** Download a PDF containing the graph and selected parameters.
 
 ### Tech Stack
-*   **Frontend:** Vanilla HTML5, CSS3, and JavaScript (ES6+).
-*   **Hosting:** Cloudflare Workers.
-*   **Design:** Minimalist modern UI.
+*   **Frontend:** Vanilla HTML5, CSS3, and JavaScript (ES6+). [![Frontend](https://img.shields.io/badge/Frontend-Vanilla%20HTML5%20%2B%20CSS3%20%2B%20JavaScript-yellow)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+*   **Hosting:** Cloudflare Workers. [![Hosting](https://img.shields.io/badge/Hosting-Cloudflare-orange)](https://workers.cloudflare.com/)
+*   **Design:** Minimalist modern UI. [![Design](https://img.shields.io/badge/Design-Minimalist%20Modern%20UI-green)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 
 ### How to use
 1.  **Online:** Visit the [Live Demo](https://investmentcalculator.pomerancee.workers.dev).
@@ -57,8 +57,12 @@ I wanted to create a tool that is **fast**, **modern**, **beginner-friendly**, k
     *   Open `index.html` in your favorite browser.
 
 ## Contributing
-Contributions, ideas, and improvements are welcome.
+Contributions, ideas, and improvements are welcome. [![Contributing](https://img.shields.io/badge/Contributing-Yes-brightgreen)](https://github.com/robinjiri/Investment-Calculator/blob/main/CONTRIBUTING.md)
 Feel free to open an issue or submit a pull request.
+
+## ⭐ Like this project?
+If you find it useful, give it a star on GitHub!  
+[![GitHub stars](https://img.shields.io/github/stars/robinjiri/Investment-Calculator)](https://github.com/robinjiri/Investment-Calculator/stargazers)
 
 ## License
 This project is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)**. 

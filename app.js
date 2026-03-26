@@ -69,8 +69,7 @@ const customEtfSelect = document.getElementById('custom-etf-select');
 const selectedEtfDisplay = document.getElementById('selected-etf');
 const etfOptionsContainer = document.getElementById('etf-options');
 
-const chartTypeLineBtn = document.getElementById('chart-type-line');
-const chartTypeAreaBtn = document.getElementById('chart-type-area');
+const growthVisualToggle = document.getElementById('growth-visual-toggle');
 const downloadPdfBtn = document.getElementById('download-pdf-btn');
 
 const totalInvestedDisplay = document.getElementById('total-invested');
@@ -104,11 +103,13 @@ let state = {
     includeFire: false,
     withdrawalRate: 4,
     monthlyExpenses: 25000,
-    chartType: 'line',
+    advancedGrowthView: true,
     currency: 'USD',
     isDarkMode: true, // Default to dark mode
     benchmark: null // Stores the benchmark result
 };
+
+let controlsPanelBorderObserver = null;
 
 /**
  * Initializes the application.
@@ -137,9 +138,61 @@ function init() {
     window.App.state = state;
     
     initChart(chartCanvas.getContext('2d'), state.isDarkMode, state.currency);
+    initControlsPanelBorder();
     attachEventListeners();
     updateUIState(); // Set initial UI state
     calculateAndRender();
+}
+
+function updateControlsPanelBorder() {
+    const controlsPanel = document.querySelector('.controls-panel');
+    const borderSvg = controlsPanel?.querySelector('.controls-panel-border');
+    const trackPath = borderSvg?.querySelector('.controls-panel-border-track');
+    const wavePaths = borderSvg?.querySelectorAll('.controls-panel-border-wave');
+
+    if (!controlsPanel || !borderSvg || !trackPath || !wavePaths?.length) return;
+
+    const { width, height } = controlsPanel.getBoundingClientRect();
+    if (width <= 0 || height <= 0) return;
+
+    const computedStyle = window.getComputedStyle(controlsPanel);
+    const radiusValue = parseFloat(computedStyle.borderTopLeftRadius);
+    const radius = Number.isFinite(radiusValue) ? radiusValue : 16;
+    const inset = 1;
+    const right = width - inset;
+    const bottom = height - inset;
+    const cornerRadius = Math.max(0, Math.min(radius, (width - (inset * 2)) / 2, (height - (inset * 2)) / 2));
+    const pathData = [
+        `M ${inset + cornerRadius} ${inset}`,
+        `H ${right - cornerRadius}`,
+        `A ${cornerRadius} ${cornerRadius} 0 0 1 ${right} ${inset + cornerRadius}`,
+        `V ${bottom - cornerRadius}`,
+        `A ${cornerRadius} ${cornerRadius} 0 0 1 ${right - cornerRadius} ${bottom}`,
+        `H ${inset + cornerRadius}`,
+        `A ${cornerRadius} ${cornerRadius} 0 0 1 ${inset} ${bottom - cornerRadius}`,
+        `V ${inset + cornerRadius}`,
+        `A ${cornerRadius} ${cornerRadius} 0 0 1 ${inset + cornerRadius} ${inset}`,
+        'Z'
+    ].join(' ');
+
+    borderSvg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    trackPath.setAttribute('d', pathData);
+    wavePaths.forEach((wavePath) => {
+        wavePath.setAttribute('d', pathData);
+    });
+}
+
+function initControlsPanelBorder() {
+    updateControlsPanelBorder();
+
+    const controlsPanel = document.querySelector('.controls-panel');
+    if (!controlsPanel || typeof ResizeObserver === 'undefined') return;
+
+    controlsPanelBorderObserver?.disconnect();
+    controlsPanelBorderObserver = new ResizeObserver(() => {
+        updateControlsPanelBorder();
+    });
+    controlsPanelBorderObserver.observe(controlsPanel);
 }
 
 /**
@@ -224,6 +277,7 @@ function updateCustomCurrencyOptions() {
         div.className = 'currency-option'; // Keep for styles
         div.classList.add('custom-option'); // Add unified
         div.dataset.value = option.value;
+        div.style.setProperty('--stagger-index', i);
         div.textContent = option.textContent;
         
         if (option.selected || option.value === state.currency) {
@@ -249,6 +303,7 @@ function updateCustomLanguageOptions() {
         const div = document.createElement('div');
         div.className = 'custom-option';
         div.dataset.value = option.value;
+        div.style.setProperty('--stagger-index', i);
         div.textContent = option.textContent;
         
         if (option.selected) {
@@ -278,6 +333,7 @@ function updateCustomFrequencyOptions() {
         const div = document.createElement('div');
         div.className = 'custom-option';
         div.dataset.value = option.value;
+        div.style.setProperty('--stagger-index', i);
         const text = t[option.getAttribute('data-i18n')] || option.textContent;
         div.textContent = text;
         
@@ -308,6 +364,7 @@ function updateCustomEtfOptions() {
         const div = document.createElement('div');
         div.className = 'custom-option';
         div.dataset.value = option.value;
+        div.style.setProperty('--stagger-index', i);
         
         const i18nKey = option.getAttribute('data-i18n');
         const text = i18nKey ? t[i18nKey] : option.textContent;
@@ -472,9 +529,9 @@ function attachEventListeners() {
     // Download CSV
     downloadCsvBtn.addEventListener('click', downloadCSV);
 
-    // Chart Type Toggles
-    chartTypeLineBtn.addEventListener('click', () => setChartType('line'));
-    chartTypeAreaBtn.addEventListener('click', () => setChartType('area'));
+    if (growthVisualToggle) {
+        growthVisualToggle.addEventListener('change', (e) => setGrowthVisualizationEnabled(e.target.checked));
+    }
 
     // Download PDF
     downloadPdfBtn.addEventListener('click', downloadPDF);
@@ -490,6 +547,18 @@ function attachEventListeners() {
         const tabs = tabbar.querySelectorAll('ul li');
         const tabContents = document.querySelectorAll('[data-tab-content]');
 
+        const syncTabbarIndicator = (tab) => {
+            const ul = tabbar.querySelector('ul');
+            if (!ul) return;
+
+            const tabRect = tab.getBoundingClientRect();
+            const tabbarRect = ul.getBoundingClientRect();
+            const offset = (tabRect.left - tabbarRect.left) + (tabRect.width / 2);
+
+            tabbar.style.setProperty('--indicator-x', `${offset - 34}px`);
+            tabbar.style.setProperty('--active-line-x', `${offset}px`);
+        };
+
         tabs.forEach((tab) => {
             tab.addEventListener('click', () => {
                 // Return if already active
@@ -499,16 +568,7 @@ function attachEventListeners() {
                 tabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
 
-                // Calculate indicator position
-                const tabRect = tab.getBoundingClientRect();
-                const ul = tabbar.querySelector('ul');
-                const tabbarRect = ul.getBoundingClientRect();
-                
-                // Center of the list item relative to the ul
-                const offset = (tabRect.left - tabbarRect.left) + (tabRect.width / 2);
-                
-                // The indicator SVG width is 68px (center is 34)
-                tabbar.style.setProperty('--indicator-x', `${offset - 34}px`);
+                syncTabbarIndicator(tab);
                 
                 // Handle content switching
                 const targetIndex = tab.getAttribute('data-tab-index');
@@ -534,13 +594,7 @@ function attachEventListeners() {
         setTimeout(() => {
             const activeTab = tabbar.querySelector('ul li.active');
             if (activeTab) {
-                const tabRect = activeTab.getBoundingClientRect();
-                const ul = tabbar.querySelector('ul');
-                if (ul) {
-                    const tabbarRect = ul.getBoundingClientRect();
-                    const offset = (tabRect.left - tabbarRect.left) + (tabRect.width / 2);
-                    tabbar.style.setProperty('--indicator-x', `${offset - 34}px`);
-                }
+                syncTabbarIndicator(activeTab);
             }
         }, 100);
 
@@ -550,13 +604,10 @@ function attachEventListeners() {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
                 const currentActive = tabbar.querySelector('ul li.active');
-                const ul = tabbar.querySelector('ul');
-                if (currentActive && ul) {
+                if (currentActive) {
                     const tabRect = currentActive.getBoundingClientRect();
-                    const tabbarRect = ul.getBoundingClientRect();
-                    if (tabRect.width > 0) { // Check if visible
-                        const offset = (tabRect.left - tabbarRect.left) + (tabRect.width / 2);
-                        tabbar.style.setProperty('--indicator-x', `${offset - 34}px`);
+                    if (tabRect.width > 0) {
+                        syncTabbarIndicator(currentActive);
                     }
                 }
             }, 100);
@@ -567,6 +618,14 @@ function attachEventListeners() {
 /**
  * Toggles between light and dark mode
  */
+function updateThemeToggleAccessibility() {
+    const t = window.App.currentTranslation || window.App.translations['en'];
+    const toggleLabel = state.isDarkMode ? t.switchToLight : t.switchToDark;
+
+    themeToggleBtn.setAttribute('title', toggleLabel);
+    themeToggleBtn.setAttribute('aria-label', toggleLabel);
+}
+
 function toggleTheme() {
     const themeToggleInput = document.getElementById('theme-toggle-input');
     // Checked = light mode, unchecked = dark mode
@@ -575,16 +634,23 @@ function toggleTheme() {
 
     // Update chart colors
     updateChartTheme(state.isDarkMode);
+    updateThemeToggleAccessibility();
 }
 
-/**
- * Sets the chart type and updates the UI.
- */
-function setChartType(type) {
-    state.chartType = type;
-    chartTypeLineBtn.classList.toggle('active', type === 'line');
-    chartTypeAreaBtn.classList.toggle('active', type === 'area');
-    window.App.toggleChartType(type);
+function setGrowthVisualizationEnabled(enabled) {
+    state.advancedGrowthView = enabled;
+    if (growthVisualToggle) {
+        growthVisualToggle.checked = enabled;
+    }
+
+    if (window.App.setGrowthVisualizationEnabled) {
+        window.App.setGrowthVisualizationEnabled(enabled);
+    }
+
+    if (state.lastResult) {
+        const benchmarkValues = state.benchmark ? state.benchmark.portfolioValue : null;
+        updateChart(state.lastResult.labels, state.lastResult.totalInvested, state.lastResult.portfolioValue, benchmarkValues);
+    }
 }
 
 /**
@@ -725,12 +791,19 @@ function updateUIState() {
     }
 
     // Benchmark Buttons Visibility
+    const t = window.App.currentTranslation || window.App.translations['en'];
+    clearBenchmarkBtn.textContent = t.clearBenchmark;
+
     if (state.benchmark) {
         clearBenchmarkBtn.classList.remove('hidden');
-        setBenchmarkBtn.textContent = 'Update Benchmark';
+        setBenchmarkBtn.textContent = t.updateBenchmark;
     } else {
         clearBenchmarkBtn.classList.add('hidden');
-        setBenchmarkBtn.textContent = 'Set as Benchmark';
+        setBenchmarkBtn.textContent = t.setBenchmark;
+    }
+
+    if (growthVisualToggle) {
+        growthVisualToggle.checked = state.advancedGrowthView;
     }
 }
 
@@ -790,7 +863,7 @@ function calculateAndRender() {
     
     updateChart(result.labels, result.totalInvested, result.portfolioValue, benchmarkValues);
     updateBreakdownTable(result.breakdown);
-    checkMilestones(result.portfolioValue);
+    checkMilestones(result.portfolioValue, result.totalInvested);
     if (state.includeFire) updateFIREStatus(result.summary.finalBalance);
 }
 
@@ -1143,6 +1216,67 @@ function toggleExtraMilestones() {
     }
 }
 
+function buildExtraMilestones(maxValue) {
+    const extraMilestones = [];
+    const linearMilestoneCeiling = 20000000;
+
+    for (let value = 10000000; value <= maxValue && value <= linearMilestoneCeiling; value += 5000000) {
+        extraMilestones.push({ value, label: formatMilestoneValueLabel(value), emoji: '🏆' });
+    }
+
+    for (let value = 40000000; value <= maxValue; value *= 2) {
+        extraMilestones.push({ value, label: formatMilestoneValueLabel(value), emoji: '🏆' });
+    }
+
+    return extraMilestones;
+}
+
+function formatMilestoneValueLabel(value) {
+    const ranges = [
+        { divisor: 1000000000000, suffix: ' Trillion' },
+        { divisor: 1000000000, suffix: ' Billion' },
+        { divisor: 1000000, suffix: ' Million' }
+    ];
+
+    for (const range of ranges) {
+        if (value >= range.divisor) {
+            const scaledValue = value / range.divisor;
+            const formattedValue = scaledValue >= 100
+                ? scaledValue.toFixed(0)
+                : scaledValue >= 10
+                    ? scaledValue.toFixed(1)
+                    : scaledValue.toFixed(2);
+
+            return `${formattedValue.replace(/\.0+$|(\.\d*[1-9])0+$/, '$1')}${range.suffix}`;
+        }
+    }
+
+    if (value >= 1000) {
+        return `${Math.round(value / 1000)}k`;
+    }
+
+    return value.toString();
+}
+
+function getBeatsDepositYearIndex(portfolioValueData, totalInvestedData) {
+    if (!portfolioValueData || !totalInvestedData || portfolioValueData.length !== totalInvestedData.length) {
+        return -1;
+    }
+
+    const cumulativeInterest = portfolioValueData.map((value, index) => Math.max(value - totalInvestedData[index], 0));
+
+    for (let index = 1; index < cumulativeInterest.length; index += 1) {
+        const yearlyDeposit = Math.max(totalInvestedData[index] - totalInvestedData[index - 1], 0);
+        const yearlyInterest = Math.max(cumulativeInterest[index] - cumulativeInterest[index - 1], 0);
+
+        if (yearlyInterest > yearlyDeposit) {
+            return index;
+        }
+    }
+
+    return -1;
+}
+
 /**
  * Checks for financial milestones and updates the UI.
  */
@@ -1151,7 +1285,7 @@ function toggleExtraMilestones() {
 /**
  * Checks for financial milestones and updates the UI list.
  */
-function checkMilestones(portfolioValueData) {
+function checkMilestones(portfolioValueData, totalInvestedData) {
     if (!portfolioValueData || portfolioValueData.length === 0) return;
     
     const t = window.App.currentTranslation || window.App.translations['en'];
@@ -1173,21 +1307,15 @@ function checkMilestones(portfolioValueData) {
         { value: 5000000, label: '5 Million', emoji: '🏆' }
     ];
 
-    // Automatically generate every 5 million milestone up to max portfolio value
     const maxValue = Math.max(...portfolioValueData);
-    const extraMilestones = [];
-    for (let m = 10000000; m <= maxValue; m += 5000000) {
-        extraMilestones.push({ value: m, label: `${m / 1000000} Million`, emoji: '🏆' });
-    }
+    const extraMilestones = buildExtraMilestones(maxValue);
 
     let foundMilestones = false;
     let hasExtra = false;
     const symbol = getCurrencySymbol(state.currency);
 
-    // Combine base + auto-generated milestones for logic
     const allPotentialMilestones = [...baseMilestones, ...extraMilestones];
 
-    // Add FIRE achieved milestone if applicable
     if (state.includeFire) {
         const annualExpenses = state.monthlyExpenses * 12;
         const requiredCapital = annualExpenses / (state.withdrawalRate / 100);
@@ -1200,24 +1328,34 @@ function checkMilestones(portfolioValueData) {
                 emoji: '🔥',
                 isFire: true
             });
-            // Sort by value to insert FIRE in the right place
-            allPotentialMilestones.sort((a, b) => a.value - b.value);
         }
     }
+
+    const beatsDepositYearIndex = getBeatsDepositYearIndex(portfolioValueData, totalInvestedData);
+    if (beatsDepositYearIndex !== -1) {
+        allPotentialMilestones.push({
+            value: portfolioValueData[beatsDepositYearIndex],
+            label: t.firstInterestCrossover || 'Beats deposit',
+            emoji: '⚡',
+            isBeatsDeposit: true
+        });
+    }
+
+    allPotentialMilestones.sort((a, b) => a.value - b.value);
 
     allPotentialMilestones.forEach(milestone => {
         const yearIndex = portfolioValueData.findIndex(val => val >= milestone.value);
         if (yearIndex !== -1) {
             foundMilestones = true;
-            // Randomize emojis for > 1M
             let emoji = milestone.emoji;
-            if (milestone.value > 1000000 && !milestone.isFire) {
+            if (milestone.value > 1000000 && !milestone.isFire && !milestone.isBeatsDeposit) {
                 const randomEmojis = ['💎', '✨', '🤴', '🏝️', '💸', '🦁'];
                 emoji = randomEmojis[Math.floor(Math.random() * randomEmojis.length)];
             }
 
-            // For FIRE, show full capital name if label is short
-            const milestoneLabel = milestone.isFire ? milestone.label : `${symbol}${milestone.label}`;
+            const milestoneLabel = milestone.isFire || milestone.isBeatsDeposit
+                ? milestone.label
+                : `${symbol}${milestone.label}`;
 
             const milestoneMarkup = `
                 <div class="milestone-item">
@@ -1361,12 +1499,21 @@ function changeLanguage(langCode) {
         }
     });
 
-    const isDark = document.body.classList.contains('light-mode') === false;
-    const themeTextSpan = document.querySelector('#theme-toggle [data-i18n="switchToLight"], #theme-toggle [data-i18n="switchToDark"]');
-    if (themeTextSpan) {
-        themeTextSpan.textContent = isDark ? t.switchToLight : t.switchToDark;
-        themeTextSpan.setAttribute('data-i18n', isDark ? 'switchToLight' : 'switchToDark');
-    }
+    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        const key = el.getAttribute('data-i18n-title');
+        if (t[key]) {
+            el.setAttribute('title', t[key]);
+        }
+    });
+
+    document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+        const key = el.getAttribute('data-i18n-aria-label');
+        if (t[key]) {
+            el.setAttribute('aria-label', t[key]);
+        }
+    });
+
+    updateThemeToggleAccessibility();
 
     // Auto-switch currency based on language selection
     const langToCurrency = {
