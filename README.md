@@ -46,9 +46,9 @@ I wanted to create a tool that is **fast**, **modern**, **beginner-friendly**, k
 *  **PDF Export:** Download a PDF containing the graph and selected parameters.
 
 ### Tech Stack
-*   **Frontend:** Vanilla HTML5, CSS3, and JavaScript (ES6+). [![Frontend](https://img.shields.io/badge/Frontend-Vanilla%20HTML5%20%2B%20CSS3%20%2B%20JavaScript-yellow)](https://developer.mozilla.org/en-US/docs/Web/HTML)
-*   **Hosting:** Cloudflare Workers. [![Hosting](https://img.shields.io/badge/Hosting-Cloudflare-orange)](https://workers.cloudflare.com/)
-*   **Design:** Minimalist modern UI. [![Design](https://img.shields.io/badge/Design-Minimalist%20Modern%20UI-green)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+*   **Frontend:** Vanilla HTML5, CSS3, and JavaScript (ES6+).       [![Frontend](https://img.shields.io/badge/Frontend-Vanilla%20HTML5%20%2B%20CSS3%20%2B%20JavaScript-yellow)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+*   **Hosting:** Cloudflare Workers.                                [![Hosting](https://img.shields.io/badge/Hosting-Cloudflare-orange)](https://workers.cloudflare.com/)
+*   **Design:** Minimalist modern UI.                               [![Design](https://img.shields.io/badge/Design-Minimalist%20Modern%20UI-green)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 
 ### How to use
 1.  **Online:** Visit the [Live Demo](https://investmentcalculator.pomerancee.workers.dev).
@@ -57,8 +57,8 @@ I wanted to create a tool that is **fast**, **modern**, **beginner-friendly**, k
     *   Open `index.html` in your favorite browser.
 
 ## Contributing
-Contributions, ideas, and improvements are welcome. [![Contributing](https://img.shields.io/badge/Contributing-Yes-brightgreen)](https://github.com/robinjiri/Investment-Calculator/blob/main/CONTRIBUTING.md)
-Feel free to open an issue or submit a pull request.
+Contributions, ideas, and improvements are welcome. 
+Feel free to open an issue or submit a pull request.    [![Contributing](https://img.shields.io/badge/Contributing-Yes-brightgreen)](https://github.com/robinjiri/Investment-Calculator/blob/main/CONTRIBUTING.md)
 
 ## ⭐ Like this project?
 If you find it useful, give it a star on GitHub!  
