@@ -18,7 +18,7 @@ A modern, minimalist investment calculator designed to project long-term portfol
 
 ![Calculator Screenshot](screenshot.png)
 
-###Phone preview
+### Phone preview
 
 ![Calculator Mobile-screenshot](screenshot-mobile.png)
 
